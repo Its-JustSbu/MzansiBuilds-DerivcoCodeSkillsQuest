@@ -12,5 +12,5 @@
    `dotnet test --no-build`
 
 ## UML Class Architecture
-<img width="4096" height="2762" alt="image" src="https://github.com/user-attachments/assets/af962bd7-ec9b-4059-926e-5ce5cc7c8fc8" alt="UML Class Diagram of Database"/>
+<img width="3722" height="3147" alt="image" src="https://github.com/user-attachments/assets/2d78aa62-2f2e-4d4c-b765-5741aa0d72d8"  alt="UML Class Diagram of Database"/>
 The UML class diagram above represents the class structure that will be used as to communicate with the data layer of the application. 
