@@ -1,5 +1,8 @@
-var builder = WebApplication.CreateBuilder(args);
+using Backend.Models;
+using Microsoft.EntityFrameworkCore;
 
+var builder = WebApplication.CreateBuilder(args);
+var connectionString = builder.Configuration["ConnectionStrings:DefaultConnection"];
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -12,6 +15,10 @@ builder.Logging.AddDebug();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 builder.Services.AddSwaggerGen();
+builder.Services.AddDbContext<AppDbContext>(options =>
+{
+    options.UseSqlServer(connectionString);
+});
 builder.Logging.SetMinimumLevel(LogLevel.Information);
 
 var app = builder.Build();
