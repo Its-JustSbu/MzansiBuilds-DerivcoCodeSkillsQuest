@@ -2,8 +2,12 @@ name: Angular CI
 
 on: 
   push:
+    paths:
+      - 'frontend/**'
     branches: ["main"]
-
+defaults:
+  run:
+    working-directory: frontend
 jobs:
   build:
     runs-on: ubuntu-latest

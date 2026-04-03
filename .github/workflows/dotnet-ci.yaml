@@ -2,8 +2,12 @@ name: .NET API CI
 
 on:
   push:
+    paths:
+      - 'Backend/**'
     branches: ["main"]
-
+defaults:
+  run:
+    working-directory: Backend
 jobs:
   build:
     runs-on: ubuntu-latest
