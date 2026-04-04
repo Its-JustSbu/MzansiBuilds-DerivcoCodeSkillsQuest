@@ -6,6 +6,16 @@ namespace Backend.Repositories.DataRepository
 {
     public class DataRepository(AppDbContext context) : IDataRepository
     {
+        public void DeleteRange<T>(List<T> entities) where T : class
+        {
+            context.RemoveRange(entities);
+        }
+
+        async Task IDataRepository.AddangeAsync<T>(List<T> entities)
+        {
+            await context.AddRangeAsync(entities);
+        }
+
         async Task IDataRepository.AddAsync<T>(T entity)
         {
             await context.Set<T>().AddAsync(entity);
@@ -34,6 +44,11 @@ namespace Backend.Repositories.DataRepository
         void IDataRepository.Update<T>(T entity)
         {
             context.Update(entity);
+        }
+
+        void IDataRepository.UpdateRange<T>(List<T> entities)
+        {
+            context.UpdateRange(entities);
         }
     }
 }
