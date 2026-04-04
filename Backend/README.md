@@ -9,13 +9,13 @@
 
 ## Managing Application Secrets
 To ensure that unique variables in the backend are not exposed. This project makes use of the secrets.json embedded in your local application. Update the secrets.json by right clicking the Backend project in Visual Studio and navigating to ##Manage User Secrets## and change the file to follow the following stucture with your relevant variables.
-`
+```
 {
   "ConnectionStrings": {
     "DefaultConnection": "Server={YourLocalServer};Database={DatabaseName};Trust_Connection=True;TrustServerCertificate=True;"
   }
 }
-`
+```
 
 ## Testing 
 1. Run API unit tests
