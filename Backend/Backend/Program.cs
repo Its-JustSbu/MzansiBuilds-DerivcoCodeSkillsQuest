@@ -1,4 +1,5 @@
 using Backend.Models;
+using Backend.Repositories.DataRepository;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,6 +20,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseSqlServer(connectionString);
 });
+builder.Services.AddScoped<IDataRepository, DataRepository>();
+
 builder.Logging.SetMinimumLevel(LogLevel.Information);
 
 var app = builder.Build();
