@@ -1,38 +1,39 @@
 ﻿using Backend.Models;
+using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
 namespace Backend.Repositories.DataRepository
 {
     public class DataRepository(AppDbContext context) : IDataRepository
     {
-        Task IDataRepository.AddAsync<T>(T entity)
+        async Task IDataRepository.AddAsync<T>(T entity)
         {
-            throw new NotImplementedException();
+            await context.Set<T>().AddAsync(entity);
         }
 
         void IDataRepository.Delete<T>(T entity)
         {
-            throw new NotImplementedException();
+            context.Set<T>().Remove(entity);
         }
 
-        Task IDataRepository.GetAsync<T>()
+        async Task<IList<T>> IDataRepository.GetAsync<T>()
         {
-            throw new NotImplementedException();
+            return await context.Set<T>().AsNoTracking().ToListAsync();
         }
 
-        Task IDataRepository.GetByAsync<T>(Expression<Func<T, bool>> expression)
+        async Task<IList<T>> IDataRepository.GetByAsync<T>(Expression<Func<T, bool>> expression)
         {
-            throw new NotImplementedException();
+            return await context.Set<T>().Where(expression).AsNoTracking().ToListAsync();
         }
 
-        Task IDataRepository.SaveChangesAsync()
+        async Task IDataRepository.SaveChangesAsync()
         {
-            throw new NotImplementedException();
+            await context.SaveChangesAsync();
         }
 
         void IDataRepository.Update<T>(T entity)
         {
-            throw new NotImplementedException();
+            context.Update(entity);
         }
     }
 }

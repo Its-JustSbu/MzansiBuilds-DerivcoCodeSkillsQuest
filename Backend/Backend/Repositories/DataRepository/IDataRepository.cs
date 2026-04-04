@@ -7,8 +7,8 @@ namespace Backend.Repositories.DataRepository
         void Delete<T>(T entity) where T : class;
         void Update<T>(T entity) where T : class;
         Task AddAsync<T>(T entity) where T: class;
-        Task GetAsync<T>() where T : class;
-        Task GetByAsync<T>(Expression<Func<T, bool>> expression) where T : class;
+        Task<IList<T>> GetAsync<T>() where T : class;
+        Task<IList<T>> GetByAsync<T>(Expression<Func<T, bool>> expression) where T : class;
         Task SaveChangesAsync();
     }
 }
