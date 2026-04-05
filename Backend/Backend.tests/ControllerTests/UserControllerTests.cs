@@ -2,6 +2,7 @@
 using Backend.Models.DTOs;
 using Backend.Models.Views;
 using Backend.Repositories.DataRepository;
+using Backend.Services;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using System;
@@ -13,11 +14,12 @@ namespace Backend.tests.ControllerTests
     public class UserControllerTests
     {
         private Mock<IDataRepository> mockDataRepository;
+        private Mock<TokenService> mockTokenService;
         private UserController mockUserController;
         public UserControllerTests()
         {
             mockDataRepository = new Mock<IDataRepository>();
-            mockUserController = new UserController(mockDataRepository.Object);
+            mockUserController = new UserController(mockDataRepository.Object, mockTokenService!.Object);
         }
         [Fact]
         public async Task CreateUser_AddingANewUser_ReturnsCreatedAtAction()

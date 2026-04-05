@@ -1,7 +1,11 @@
 ﻿using Backend.Models.Views;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using Microsoft.IdentityModel.Tokens;
 using System.ComponentModel.DataAnnotations;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Security.Cryptography;
+using System.Text;
 
 namespace Backend.Models.DTOs
 {
@@ -21,7 +25,6 @@ namespace Backend.Models.DTOs
         public string? Password { get; set; }
         [Required]
         public byte[]? Salt { get; set; }
-        public string? RefreshToken { get; set; }
         public User() { }
         public User(UserView user)
         {
@@ -44,7 +47,7 @@ namespace Backend.Models.DTOs
                 iterationCount: 100000,
                 numBytesRequested: 256 / 8));
         }
-        protected bool VerifyPassword(string password)
+        public bool VerifyPassword(string password)
         {
             // 1. Re-hash the entered password using the same salt and parameters
             string newlyHashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
@@ -58,6 +61,10 @@ namespace Backend.Models.DTOs
             return CryptographicOperations.FixedTimeEquals(
                 Convert.FromBase64String(newlyHashed),
                 Convert.FromBase64String(Password!));
+        }
+        public void UpdatePassword(string newPassword)
+        {
+            CreatePasswordHash(newPassword);
         }
     }
 }

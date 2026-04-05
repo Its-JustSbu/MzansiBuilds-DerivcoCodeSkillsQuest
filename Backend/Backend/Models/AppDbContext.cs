@@ -20,6 +20,7 @@ namespace Backend.Models
         DbSet<CollaboratorType> CollaboratorTypes { get; set; }
         DbSet<Support> Supports { get; set; }
         DbSet<SupportType> SupportTypes { get; set; }
+        DbSet<RefreshToken> RefreshTokens { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

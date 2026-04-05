@@ -6,7 +6,7 @@ namespace Backend.Repositories.DataRepository
 {
     public class DataRepository(AppDbContext context) : IDataRepository
     {
-        public void DeleteRange<T>(List<T> entities) where T : class
+        void IDataRepository.DeleteRange<T>(List<T> entities) where T : class
         {
             context.RemoveRange(entities);
         }
@@ -49,6 +49,11 @@ namespace Backend.Repositories.DataRepository
         void IDataRepository.UpdateRange<T>(List<T> entities)
         {
             context.UpdateRange(entities);
+        }
+
+        IQueryable<T> IDataRepository.GetOneByAsync<T>(Expression<Func<T, bool>> expression)
+        {
+            return context.Set<T>().Where(expression).AsNoTracking();
         }
     }
 }
