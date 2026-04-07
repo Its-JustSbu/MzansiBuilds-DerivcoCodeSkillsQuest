@@ -2,7 +2,8 @@
 using Backend.Models.DTOs;
 using Backend.Models.Views;
 using Backend.Repositories.DataRepository;
-using Backend.Services;
+using Backend.Services.CurrentUserService;
+using Backend.Services.TokenService;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Moq;
@@ -174,7 +175,7 @@ namespace Backend.tests.ControllerTests
             var token = new RefreshToken(refreshToken, 1) { User = new User() { Id = 1, EmailAddress = "john.doe@example.com" } };
 
             // Act
-            mockDataRepository.Setup(repo => repo.GetOneByAsync<RefreshToken>(x => x.Token == refreshToken)).Returns(new List<RefreshToken>() { token }.AsQueryable());
+            mockDataRepository.Setup(repo => repo.GetOneByAsync<RefreshToken>(x => x.Token == refreshToken && x.IsValid == true)).Returns(new List<RefreshToken>() { token }.AsQueryable());
             mockDataRepository.Setup(repo => repo.Update(It.IsAny<RefreshToken>())).Verifiable();
             mockDataRepository.Setup(repo => repo.AddAsync(It.IsAny<RefreshToken>())).Returns(Task.CompletedTask);
 

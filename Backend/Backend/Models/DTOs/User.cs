@@ -25,6 +25,10 @@ namespace Backend.Models.DTOs
         public string? Password { get; set; }
         [Required]
         public byte[]? Salt { get; set; }
+        [DataType(DataType.DateTime)]
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
+        [DataType(DataType.DateTime)]
+        public DateTime ModifiedAt { get; set; } = DateTime.Now;
         public User() { }
         public User(UserView user)
         {
@@ -65,6 +69,14 @@ namespace Backend.Models.DTOs
         public void UpdatePassword(string newPassword)
         {
             CreatePasswordHash(newPassword);
+            ModifiedAt = DateTime.Now;
+        }
+        public void UpdateUser(string name, string surname, string username)
+        {
+            Name = name;
+            Surname = surname;
+            Username = username;
+            ModifiedAt = DateTime.Now;
         }
     }
 }

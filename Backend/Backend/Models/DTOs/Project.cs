@@ -11,5 +11,12 @@ namespace Backend.Models.DTOs
         public string? Name { get; set; }
         [Required, MaxLength(500)]
         public string? Description { get; set; }
+        [DataType(DataType.DateTime)]
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
+        public void UpdateProject(string name, string description)
+        {
+            Name = name;
+            Description = description;
+        }
     }
 }

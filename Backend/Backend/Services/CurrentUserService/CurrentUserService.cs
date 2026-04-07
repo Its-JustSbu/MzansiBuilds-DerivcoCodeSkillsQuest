@@ -1,7 +1,7 @@
 ﻿using Backend.Models.DTOs;
 using System.Security.Claims;
 
-namespace Backend.Services
+namespace Backend.Services.CurrentUserService
 {
     public class CurrentUserService : ICurrentUserService
     {

@@ -15,5 +15,14 @@ namespace Backend.Models.DTOs
         [ForeignKey(nameof(ProjectId))]
         public int ProjectId { get; set; }
         public Project? Project { get; set; }
+        [DataType(DataType.DateTime)]
+        public DateTime RequestedAt { get; set; } = DateTime.Now;
+        public void UpdateSupport(string description, int supportTypeId, int projectId)
+        {
+            Description = description;
+            SupportTypeId = supportTypeId;
+            ProjectId = projectId;
+            RequestedAt = DateTime.Now;
+        }
     }
 }

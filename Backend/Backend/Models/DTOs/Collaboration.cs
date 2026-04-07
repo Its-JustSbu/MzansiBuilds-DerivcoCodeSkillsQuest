@@ -19,5 +19,14 @@ namespace Backend.Models.DTOs
         [ForeignKey(nameof(CollaboratorTypeId))]
         public int CollaboratorTypeId { get; set; }
         public CollaboratorType? CollaboratorType { get; set; }
+        [DataType(DataType.DateTime)]
+        public DateTime JoinedAt { get; set; } = DateTime.Now;
+        public bool IsOwner { get; set; }
+        public void UpdatedCollaboration(int requestStatusId, int collaboratorTypeId, bool isOwner)
+        {
+            RequestStatusId = requestStatusId;
+            CollaboratorTypeId = collaboratorTypeId;
+            IsOwner = isOwner;
+        }
     }
 }

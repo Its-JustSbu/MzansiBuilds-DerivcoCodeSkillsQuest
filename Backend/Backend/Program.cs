@@ -1,6 +1,7 @@
 using Backend.Models;
 using Backend.Repositories.DataRepository;
-using Backend.Services;
+using Backend.Services.CurrentUserService;
+using Backend.Services.TokenService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;

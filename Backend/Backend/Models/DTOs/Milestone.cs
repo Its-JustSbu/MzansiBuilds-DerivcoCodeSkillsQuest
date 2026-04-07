@@ -1,10 +1,25 @@
 ﻿using Backend.Models.IDTOs;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Backend.Models.DTOs
 {
-    public class Milestone : IStatus
+    public class Milestone
     {
-        int IStatus.Id { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        string? IStatus.Name { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        [Key]
+        public int Id { get; set; }
+        [Required, MaxLength(255)]
+        public string? Description { get; set; }
+        [ForeignKey(nameof(ProjectStageId))]
+        public int ProjectStageId { get; set; }
+        public ProjectStage? ProjectStage { get; set; }
+        [DataType(DataType.DateTime)]
+        public DateTime ModifiedAt { get; set; } = DateTime.Now;
+        public void UpdateMilestone(string description, int projectStageId)
+        {
+            ProjectStageId = projectStageId;
+            Description = description;
+            ModifiedAt = DateTime.Now;
+        }
     }
 }

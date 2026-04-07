@@ -8,6 +8,7 @@ namespace Backend.Models.DTOs
         [Key]
         public int Id { get; set; }
         public string? Token { get; set; } = token;
+        [DataType(DataType.DateTime)]
         public DateTime ExpiredAt { get; set; } = DateTime.Now.AddDays(7);
         public bool IsValid { get; set; } = true;
         [ForeignKey(nameof(UserId))]

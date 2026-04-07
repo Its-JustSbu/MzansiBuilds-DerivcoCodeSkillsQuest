@@ -6,7 +6,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Backend.Services
+namespace Backend.Services.TokenService
 {
     public class TokenService : ITokenService
     {

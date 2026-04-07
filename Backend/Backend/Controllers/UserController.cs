@@ -1,7 +1,8 @@
 ﻿using Backend.Models.DTOs;
 using Backend.Models.Views;
 using Backend.Repositories.DataRepository;
-using Backend.Services;
+using Backend.Services.CurrentUserService;
+using Backend.Services.TokenService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -167,11 +168,9 @@ namespace Backend.Controllers
         {
             try
             {
-                var refreshToken = dataRepository.GetOneByAsync<RefreshToken>(x => x.Token == Token).Include(x => x.User).FirstOrDefault();
+                var refreshToken = dataRepository.GetOneByAsync<RefreshToken>(x => x.Token == Token && x.IsValid == true).Include(x => x.User).FirstOrDefault();
 
                 if (refreshToken == null) return Unauthorized("Invalid refresh token");
-
-                if (!refreshToken.IsValid) return BadRequest("Refresh token is revoked");
 
                 if (refreshToken.ExpiredAt < DateTime.UtcNow)
                 {
