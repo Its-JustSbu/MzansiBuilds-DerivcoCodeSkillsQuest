@@ -7,7 +7,6 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
-var connectionString = builder.Configuration["ConnectionStrings:DefaultConnection"];
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -22,10 +21,11 @@ builder.Services.AddOpenApi();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    options.UseSqlServer(connectionString);
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 builder.Services.AddScoped<IDataRepository, DataRepository>();
-builder.Services.AddTransient<TokenService>();
+builder.Services.AddTransient<ITokenService, TokenService>();
+builder.Services.AddTransient<ICurrentUserService, CurrentUserService>();
 
 builder.Services.AddAuthentication(cfg => {
     cfg.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -39,7 +39,7 @@ builder.Services.AddAuthentication(cfg => {
         ValidateIssuerSigningKey = true,
         IssuerSigningKey = new SymmetricSecurityKey(
             Encoding.UTF8
-            .GetBytes(builder.Configuration["ApplicationSettings:JWT_Secret"])
+            .GetBytes(builder.Configuration["ApplicationSettings:JWT_Secret"]!)
         ),
         ValidateIssuer = false,
         ValidateAudience = false,

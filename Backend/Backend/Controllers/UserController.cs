@@ -12,7 +12,7 @@ namespace Backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController(IDataRepository dataRepository, TokenService tokenService) : ControllerBase
+    public class UserController(IDataRepository dataRepository, ITokenService tokenService, ICurrentUserService currentUserService) : ControllerBase
     {
         // POST: api/User
         [HttpPost]
@@ -40,16 +40,18 @@ namespace Backend.Controllers
         {
             try
             {
-                var currentUser = await dataRepository.GetByAsync<User>(x => x.EmailAddress == user.Username || x.Username == user.Username);
+                var currentUser = dataRepository.GetOneByAsync<User>(x => x.EmailAddress == user.Username || x.Username == user.Username).FirstOrDefault();
 
-                if (currentUser.FirstOrDefault() == null || currentUser.FirstOrDefault()!.VerifyPassword(user.Password!)) return BadRequest("Invalid login details");
+                if (!currentUser!.VerifyPassword(user.Password!)) return BadRequest("Invalid login details");
 
-                var refreshToken = new RefreshToken(tokenService.GenerateRefreshToken(), currentUser.FirstOrDefault()!.Id);
+                var refreshToken = new RefreshToken(tokenService.GenerateRefreshToken(), currentUser!.Id);
 
                 await dataRepository.AddAsync(refreshToken);
                 await dataRepository.SaveChangesAsync();
 
-                return Ok(new { message = "Login successful", token = tokenService.GenerateJWTToken(currentUser.FirstOrDefault()!), refreshToken = refreshToken.Token });
+                var token = tokenService.GenerateJWTToken(currentUser!);
+
+                return Ok(new { message = "Login successful", token, refreshToken = refreshToken.Token });
             }
             catch (Exception)
             {
@@ -65,13 +67,13 @@ namespace Backend.Controllers
         {
             try
             {
-                var userId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)!.Value);
-                var refreshToken = await dataRepository.GetByAsync<RefreshToken>(x => x.Id == userId);
+                var user = currentUserService.GetUserDetails();
+                var refreshToken = dataRepository.GetOneByAsync<RefreshToken>(x => x.Id == user.Id).FirstOrDefault();
 
-                if (refreshToken.FirstOrDefault() == null) return Unauthorized("Action Impossible!");
+                if (refreshToken == null) return Unauthorized("Action Impossible!");
 
-                refreshToken.FirstOrDefault()!.RevokeToken();
-                dataRepository.Update(refreshToken.FirstOrDefault()!);
+                refreshToken.RevokeToken();
+                dataRepository.Update(refreshToken);
                 await dataRepository.SaveChangesAsync();
 
                 return Ok(new { message = "Logout successful" });
@@ -90,7 +92,7 @@ namespace Backend.Controllers
         {
             try
             {
-                var user = await dataRepository.GetByAsync<User>(x => x.Id == id);
+                var user = dataRepository.GetOneByAsync<User>(x => x.Id == id).FirstOrDefault();
 
                 if (user == null) return NotFound("User not found");
 
@@ -109,18 +111,16 @@ namespace Backend.Controllers
         {
             try
             {
-                var userId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)!.Value);
-                var userEmail = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)!.Value;
-                var currentUser = await dataRepository.GetByAsync<User>(x => x.Id == userId || x.EmailAddress == userEmail);
+                var parsedUser = currentUserService.GetUserDetails();
+                var currentUser = dataRepository.GetOneByAsync<User>(x => x.Id == parsedUser.Id || x.EmailAddress == parsedUser.EmailAddress).FirstOrDefault();
 
-                if (currentUser.FirstOrDefault() == null) return NotFound("User not found");
+                if (currentUser == null) return BadRequest("Impossible Action");
 
-                currentUser.FirstOrDefault()!.Name = user.Name;
-                currentUser.FirstOrDefault()!.Surname = user.Surname;
-                currentUser.FirstOrDefault()!.EmailAddress = user.EmailAddress;
-                currentUser.FirstOrDefault()!.Username = user.Username;
+                currentUser.Name = user.Name;
+                currentUser.Surname = user.Surname;
+                currentUser.Username = user.Username;
 
-                dataRepository.Update(currentUser.FirstOrDefault()!);
+                dataRepository.Update(currentUser);
                 await dataRepository.SaveChangesAsync();
 
                 return Ok(new { message = "User updated successfully" });
@@ -139,18 +139,17 @@ namespace Backend.Controllers
         {
             try
             {
-                var userId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)!.Value);
-                var userEmail = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)!.Value;
-                var currentUser = await dataRepository.GetByAsync<User>(x => x.Id == userId || x.EmailAddress == userEmail);
+                var user = currentUserService.GetUserDetails();
+                var currentUser = dataRepository.GetOneByAsync<User>(x => x.Id == user.Id || x.EmailAddress == user.EmailAddress).FirstOrDefault();
 
-                if (currentUser.FirstOrDefault() == null) return NotFound("User not found");
+                if (currentUser == null) return NotFound("User not found");
 
-                if (currentUser.FirstOrDefault()!.VerifyPassword(passwordView.OldPassword!)) return BadRequest("Old password is incorrect");
+                if (!currentUser.VerifyPassword(passwordView.OldPassword!)) return BadRequest("Old password is incorrect");
 
                 if (passwordView.NewPassword != passwordView.ConfirmPassword) return BadRequest("New password and confirm password do not match");
 
-                currentUser.FirstOrDefault()!.UpdatePassword(passwordView.NewPassword!);
-                dataRepository.Update(currentUser.FirstOrDefault()!);
+                currentUser.UpdatePassword(passwordView.NewPassword!);
+                dataRepository.Update(currentUser);
                 await dataRepository.SaveChangesAsync();
 
                 return Ok(new { message = "Password updated successfully" });
@@ -204,13 +203,12 @@ namespace Backend.Controllers
         {
             try
             {
-                var userId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)!.Value);
-                var userEmail = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)!.Value;
-                var currentUser = await dataRepository.GetByAsync<User>(x => x.Id == userId || x.EmailAddress == userEmail);
+                var user = currentUserService.GetUserDetails();
+                var currentUser = dataRepository.GetOneByAsync<User>(x => x.Id == user.Id || x.EmailAddress == user.EmailAddress).FirstOrDefault();
 
-                if (currentUser.FirstOrDefault() == null) return NotFound("User not found");
+                if (currentUser == null) return NotFound("User not found");
 
-                dataRepository.Delete(currentUser.FirstOrDefault()!);
+                dataRepository.Delete(currentUser);
                 await dataRepository.SaveChangesAsync();
 
                 return Ok(new { message = "User deleted successfully" });

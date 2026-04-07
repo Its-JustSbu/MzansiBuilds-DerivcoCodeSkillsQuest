@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Backend.Services
 {
-    public class TokenService(IConfiguration configuration)
+    public class TokenService : ITokenService
     {
         public string GenerateJWTToken(User user)
         {
@@ -17,13 +17,18 @@ namespace Backend.Services
                 new(ClaimTypes.Email, user.EmailAddress!),
             };
 
+            IConfiguration config = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json")
+                .Build();
+
             var jwtToken = new JwtSecurityToken(
                 claims: claims,
                 notBefore: DateTime.UtcNow,
                 expires: DateTime.UtcNow.AddMinutes(30),
                 signingCredentials: new SigningCredentials(
                     new SymmetricSecurityKey(
-                       Encoding.UTF8.GetBytes(configuration["ApplicationSettings:JWT_Secret"]!)
+                       Encoding.UTF8.GetBytes(config["ApplicationSettings:JWT_Secret"]!)
                         ),
                     SecurityAlgorithms.HmacSha256Signature)
                 );
