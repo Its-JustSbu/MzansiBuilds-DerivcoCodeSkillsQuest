@@ -1,10 +1,12 @@
-﻿using Backend.Models.IDTOs;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Backend.Models.DTOs
 {
-    public class CollaboratorType : IStatus
+    public class CollaboratorType
     {
-        int IStatus.Id { get; set; }
-        string? IStatus.Name { get; set; }
+        [Key]
+        public int Id { get; set; }
+        [Required, MaxLength(255)]
+        public string? Name { get; set; }
     }
 }
