@@ -117,10 +117,7 @@ namespace Backend.Controllers
 
                 if (currentUser == null) return BadRequest("Impossible Action");
 
-                currentUser.Name = user.Name;
-                currentUser.Surname = user.Surname;
-                currentUser.Username = user.Username;
-
+                currentUser.UpdateUser(user.Name!, user.Surname!, user.Username!);
                 dataRepository.Update(currentUser);
                 await dataRepository.SaveChangesAsync();
 

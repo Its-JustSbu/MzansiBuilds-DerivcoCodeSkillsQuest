@@ -16,6 +16,8 @@ namespace Backend.Models.DTOs
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public ICollection<ProjectStage>? Stages { get; set; } = [];
         public ICollection<Support>? Support { get; set; } = [];
+        public ICollection<Collaboration>? Collaborations { get; set; } = [];
+        public ICollection<Comment>? Comments { get; set; } = [];
         public Project() { }
         public Project(CreateProjectView createProject)
         {

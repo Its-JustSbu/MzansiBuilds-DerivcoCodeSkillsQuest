@@ -11,7 +11,7 @@ namespace Backend.Repositories.DataRepository
             context.RemoveRange(entities);
         }
 
-        async Task IDataRepository.AddangeAsync<T>(List<T> entities)
+        async Task IDataRepository.AddRangeAsync<T>(List<T> entities)
         {
             await context.AddRangeAsync(entities);
         }
@@ -54,6 +54,14 @@ namespace Backend.Repositories.DataRepository
         IQueryable<T> IDataRepository.GetOneByAsync<T>(Expression<Func<T, bool>> expression)
         {
             return context.Set<T>().Where(expression).AsNoTracking();
+        }
+        IQueryable<T> IDataRepository.GetBy<T>(Expression<Func<T, bool>> expression)
+        {
+            return context.Set<T>().Where(expression).AsNoTracking();
+        }
+        public IQueryable<T> GetAll<T>() where T : class
+        {
+            return context.Set<T>().AsNoTracking();
         }
     }
 }
