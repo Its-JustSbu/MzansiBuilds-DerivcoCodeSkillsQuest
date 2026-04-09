@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Backend.Models.Views;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Backend.Models.DTOs
@@ -17,6 +18,16 @@ namespace Backend.Models.DTOs
         public Project? Project { get; set; }
         [DataType(DataType.DateTime)]
         public DateTime RequestedAt { get; set; } = DateTime.Now;
+        public Support() { }
+        public Support(int projectId, SupportView support)
+        {
+            ProjectId = projectId;
+            Description = support.Description;
+            if (support.SupportType != null)
+            {
+                SupportType = support.SupportType;
+            }
+        }
         public void UpdateSupport(string description, int supportTypeId, int projectId)
         {
             Description = description;

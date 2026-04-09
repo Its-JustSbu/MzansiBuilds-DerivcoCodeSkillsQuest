@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Backend.Models.Views;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Backend.Models.DTOs
@@ -19,6 +20,18 @@ namespace Backend.Models.DTOs
         [ForeignKey(nameof(ProjectId))]
         public int ProjectId { get; set; }
         public Project? Project { get; set; }
+        public ICollection<Milestone>? Milestones { get; set; } = [];
+        public ProjectStage() { }
+        public ProjectStage(int projectId, StagesView stage)
+        {
+            ProjectId = projectId;
+            StageNumber = stage.StageNumber;
+            StageTitle = stage.StageTitle;
+            if (stage.Milestones != null)
+            {
+                Milestones = [.. stage.Milestones.Select(m => new Milestone(m))];
+            }
+        }
         public void UpdateProjectStage(int stageNumber, string stageTitle, int stageStatusId)
         {
             StageNumber = stageNumber;

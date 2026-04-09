@@ -1,4 +1,5 @@
 ﻿using Backend.Models.IDTOs;
+using Backend.Models.Views;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -15,6 +16,11 @@ namespace Backend.Models.DTOs
         public ProjectStage? ProjectStage { get; set; }
         [DataType(DataType.DateTime)]
         public DateTime ModifiedAt { get; set; } = DateTime.Now;
+        public Milestone() { }
+        public Milestone(MilestoneView milestone)
+        {
+            Description = milestone.Description;
+        }
         public void UpdateMilestone(string description, int projectStageId)
         {
             ProjectStageId = projectStageId;
