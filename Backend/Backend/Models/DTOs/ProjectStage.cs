@@ -38,6 +38,9 @@ namespace Backend.Models.DTOs
             StageTitle = stageTitle;
             StageStatusId = stageStatusId;
             ModifiedAt = DateTime.Now;
-        }
+            if (StageStatus != null)
+            {
+                StageStatus = null;
+            }
     }
 }

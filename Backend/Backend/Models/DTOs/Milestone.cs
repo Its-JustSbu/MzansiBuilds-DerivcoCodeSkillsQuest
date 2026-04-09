@@ -26,6 +26,10 @@ namespace Backend.Models.DTOs
             ProjectStageId = projectStageId;
             Description = description;
             ModifiedAt = DateTime.Now;
+            if (ProjectStage != null)
+            {
+                ProjectStage = null;
+            }
         }
     }
 }

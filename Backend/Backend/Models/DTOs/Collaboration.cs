@@ -27,6 +27,14 @@ namespace Backend.Models.DTOs
             RequestStatusId = requestStatusId;
             CollaboratorTypeId = collaboratorTypeId;
             IsOwner = isOwner;
+            if (RequestStatus != null)
+            {
+                RequestStatus = null;
+            }
+            if (CollaboratorType != null)
+            {
+                CollaboratorType = null;
+            }
         }
     }
 }

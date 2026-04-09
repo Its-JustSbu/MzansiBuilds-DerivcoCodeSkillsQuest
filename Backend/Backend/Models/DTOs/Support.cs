@@ -34,6 +34,10 @@ namespace Backend.Models.DTOs
             SupportTypeId = supportTypeId;
             ProjectId = projectId;
             RequestedAt = DateTime.Now;
+            if (SupportType != null)
+            {
+                SupportType = null;
+            }
         }
     }
 }
