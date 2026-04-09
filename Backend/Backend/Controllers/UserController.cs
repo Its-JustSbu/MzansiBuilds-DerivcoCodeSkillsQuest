@@ -41,7 +41,7 @@ namespace Backend.Controllers
         {
             try
             {
-                var currentUser = dataRepository.GetOneByAsync<User>(x => x.EmailAddress == user.Username || x.Username == user.Username).FirstOrDefault();
+                var currentUser = dataRepository.GetOneBy<User>(x => x.EmailAddress == user.Username || x.Username == user.Username).FirstOrDefault();
 
                 if (!currentUser!.VerifyPassword(user.Password!)) return BadRequest("Invalid login details");
 
@@ -69,7 +69,7 @@ namespace Backend.Controllers
             try
             {
                 var user = currentUserService.GetUserDetails();
-                var refreshToken = dataRepository.GetOneByAsync<RefreshToken>(x => x.Id == user.Id).FirstOrDefault();
+                var refreshToken = dataRepository.GetOneBy<RefreshToken>(x => x.Id == user.Id).FirstOrDefault();
 
                 if (refreshToken == null) return Unauthorized("Action Impossible!");
 
@@ -93,7 +93,7 @@ namespace Backend.Controllers
         {
             try
             {
-                var user = dataRepository.GetOneByAsync<User>(x => x.Id == id).FirstOrDefault();
+                var user = dataRepository.GetOneBy<User>(x => x.Id == id).FirstOrDefault();
 
                 if (user == null) return NotFound("User not found");
 
@@ -113,7 +113,7 @@ namespace Backend.Controllers
             try
             {
                 var parsedUser = currentUserService.GetUserDetails();
-                var currentUser = dataRepository.GetOneByAsync<User>(x => x.Id == parsedUser.Id || x.EmailAddress == parsedUser.EmailAddress).FirstOrDefault();
+                var currentUser = dataRepository.GetOneBy<User>(x => x.Id == parsedUser.Id || x.EmailAddress == parsedUser.EmailAddress).FirstOrDefault();
 
                 if (currentUser == null) return BadRequest("Impossible Action");
 
@@ -138,7 +138,7 @@ namespace Backend.Controllers
             try
             {
                 var user = currentUserService.GetUserDetails();
-                var currentUser = dataRepository.GetOneByAsync<User>(x => x.Id == user.Id || x.EmailAddress == user.EmailAddress).FirstOrDefault();
+                var currentUser = dataRepository.GetOneBy<User>(x => x.Id == user.Id || x.EmailAddress == user.EmailAddress).FirstOrDefault();
 
                 if (currentUser == null) return NotFound("User not found");
 
@@ -165,7 +165,7 @@ namespace Backend.Controllers
         {
             try
             {
-                var refreshToken = dataRepository.GetOneByAsync<RefreshToken>(x => x.Token == Token && x.IsValid == true).Include(x => x.User).FirstOrDefault();
+                var refreshToken = dataRepository.GetOneBy<RefreshToken>(x => x.Token == Token && x.IsValid == true).Include(x => x.User).FirstOrDefault();
 
                 if (refreshToken == null) return Unauthorized("Invalid refresh token");
 
@@ -200,7 +200,7 @@ namespace Backend.Controllers
             try
             {
                 var user = currentUserService.GetUserDetails();
-                var currentUser = dataRepository.GetOneByAsync<User>(x => x.Id == user.Id || x.EmailAddress == user.EmailAddress).FirstOrDefault();
+                var currentUser = dataRepository.GetOneBy<User>(x => x.Id == user.Id || x.EmailAddress == user.EmailAddress).FirstOrDefault();
 
                 if (currentUser == null) return NotFound("User not found");
 

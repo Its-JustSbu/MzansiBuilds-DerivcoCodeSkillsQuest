@@ -51,7 +51,7 @@ namespace Backend.Repositories.DataRepository
             context.UpdateRange(entities);
         }
 
-        IQueryable<T> IDataRepository.GetOneByAsync<T>(Expression<Func<T, bool>> expression)
+        IQueryable<T> IDataRepository.GetOneBy<T>(Expression<Func<T, bool>> expression)
         {
             return context.Set<T>().Where(expression).AsNoTracking();
         }

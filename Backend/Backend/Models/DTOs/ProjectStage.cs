@@ -31,6 +31,10 @@ namespace Backend.Models.DTOs
             {
                 Milestones = [.. stage.Milestones.Select(m => new Milestone(m))];
             }
+            if (stage.StageStatus != null)
+            {
+                StageStatus = stage.StageStatus;
+            }
         }
         public void UpdateProjectStage(int stageNumber, string stageTitle, int stageStatusId)
         {

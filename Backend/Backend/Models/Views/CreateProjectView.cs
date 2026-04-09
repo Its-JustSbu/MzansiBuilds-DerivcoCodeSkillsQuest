@@ -19,6 +19,7 @@ namespace Backend.Models.Views
         public int StageNumber { get; set; }
         [Required, MaxLength(150)]
         public string? StageTitle { get; set; }
+        public StageStatus? StageStatus { get; set; }
         public List<MilestoneView>? Milestones { get; set; }
 
     }

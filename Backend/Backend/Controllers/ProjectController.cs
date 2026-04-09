@@ -67,7 +67,7 @@ namespace Backend.Controllers
         {
             try
             {
-                var project = DataRepository.GetOneByAsync<Project>(p => p.Id == ProjectId).FirstOrDefault();
+                var project = DataRepository.GetOneBy<Project>(p => p.Id == ProjectId).FirstOrDefault();
 
                 if (project == null) return NotFound("Project not found");
 
@@ -116,7 +116,7 @@ namespace Backend.Controllers
         {
             try
             {
-                var project = DataRepository.GetOneByAsync<Project>(p => p.Id == id).FirstOrDefault();
+                var project = DataRepository.GetOneBy<Project>(p => p.Id == id).FirstOrDefault();
 
                 if (project == null) return NotFound("Project not found");
 
@@ -124,7 +124,7 @@ namespace Backend.Controllers
                 DataRepository.Update(project);
                 await DataRepository.SaveChangesAsync();
 
-                return Ok();
+                return Ok(new { message = "Project updated successfully" });
             }
             catch (Exception)
             {
@@ -133,12 +133,12 @@ namespace Backend.Controllers
             }
         }
         // PUT: api/Project/{ProjectId}/{StageId}/stage
-        [HttpPut("{ProjectId}/{StageId}/stage")]
-        public async Task<IActionResult> UpdateProjectStage(int ProjectId, int StageId, List<StagesView> updatedStages)
+        [HttpPut("{ProjectId}/stage")]
+        public async Task<IActionResult> UpdateProjectStage(int ProjectId, List<StagesView> updatedStages)
         {
             try
             {
-                var projectStages = await DataRepository.GetByAsync<ProjectStage>(s => s.Id == StageId && s.ProjectId == ProjectId);
+                var projectStages = await DataRepository.GetByAsync<ProjectStage>(s => s.ProjectId == ProjectId);
 
                 if (projectStages.Count == 0) return NotFound("Project stage not found");
 
@@ -153,7 +153,7 @@ namespace Backend.Controllers
                 DataRepository.UpdateRange(sortedStages);
                 await DataRepository.SaveChangesAsync();
 
-                return Ok();
+                return Ok(new { message = "Project stages updated successfully" });
             }
             catch (Exception)
             {
@@ -167,7 +167,7 @@ namespace Backend.Controllers
         {
             try
             {
-                var supportRequest = DataRepository.GetOneByAsync<Support>(s => s.Id == SupportId && s.ProjectId == ProjectId).FirstOrDefault();
+                var supportRequest = DataRepository.GetOneBy<Support>(s => s.Id == SupportId && s.ProjectId == ProjectId).FirstOrDefault();
 
                 if (supportRequest == null) return NotFound("Support request not found");
 
@@ -175,7 +175,7 @@ namespace Backend.Controllers
                 DataRepository.Update(supportRequest);
                 await DataRepository.SaveChangesAsync();
 
-                return Ok();
+                return Ok(new { message = "Support request updated successfully" });
             }
             catch (Exception)
             {
@@ -189,14 +189,14 @@ namespace Backend.Controllers
         {
             try
             {
-                var project = DataRepository.GetOneByAsync<Project>(p => p.Id == id).FirstOrDefault();
+                var project = DataRepository.GetOneBy<Project>(p => p.Id == id).FirstOrDefault();
 
                 if (project == null) return NotFound("Project not found");
 
                 DataRepository.Delete(project);
                 await DataRepository.SaveChangesAsync();
 
-                return Ok();
+                return Ok(new { message = "Project deleted successfully" });
             }
             catch (Exception)
             {
@@ -231,7 +231,7 @@ namespace Backend.Controllers
                 DataRepository.DeleteRange(stagesToDelete);
                 await DataRepository.SaveChangesAsync();
 
-                return Ok();
+                return Ok(new { message = "Project stages deleted successfully" });
             }
             catch (Exception)
             {
@@ -240,19 +240,19 @@ namespace Backend.Controllers
             }
         }
         // DELETE: api/Project/{ProjectId}/{SupportId}/support
-        [HttpDelete("{ProjectId}/{SupportId}/support")]
-        public async Task<IActionResult> DeleteSupportRequest(int ProjectId, int SupportId)
+        [HttpDelete("{SupportId}/support")]
+        public async Task<IActionResult> DeleteSupportRequest(int SupportId)
         {
             try
             {
-                var supportRequest = DataRepository.GetOneByAsync<Support>(s => s.Id == SupportId && s.ProjectId == ProjectId).FirstOrDefault();
+                var supportRequest = DataRepository.GetOneBy<Support>(s => s.Id == SupportId).FirstOrDefault();
 
                 if (supportRequest == null) return NotFound("Support request not found");
 
                 DataRepository.Delete(supportRequest);
                 await DataRepository.SaveChangesAsync();
 
-                return Ok();
+                return Ok(new { message = "Support request deleted successfully" });
             }
             catch (Exception)
             {

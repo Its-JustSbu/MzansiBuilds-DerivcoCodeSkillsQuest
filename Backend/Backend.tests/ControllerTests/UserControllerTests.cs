@@ -39,14 +39,15 @@ namespace Backend.tests.ControllerTests
                 ConfirmPassword = "Password@123",
                 Username = "JohnDoe425"
             };
-            var newUser = new User(user);
 
             // Act
-            mockDataRepository.Setup(repo => repo.AddAsync(newUser)).Returns(Task.CompletedTask);
+            mockDataRepository.Setup(repo => repo.AddAsync(It.IsAny<User>())).Returns(Task.CompletedTask);
+            mockDataRepository.Setup(repo => repo.SaveChangesAsync()).Returns(Task.CompletedTask);
             var result = await mockUserController.CreateUser(user);
 
             // Assert
             mockDataRepository.Verify(repo => repo.AddAsync(It.IsAny<User>()), Times.Once);
+            mockDataRepository.Verify(repo => repo.SaveChangesAsync(), Times.Once);
             var createdAtActionResult = Assert.IsType<CreatedAtActionResult>(result);
             Assert.Equal(201, createdAtActionResult.StatusCode);
         }
@@ -71,12 +72,14 @@ namespace Backend.tests.ControllerTests
             var activeUser = new List<User>() { new(currentUser) };
 
             // Act
-            mockDataRepository.Setup(repo => repo.GetOneByAsync<User>(x => x.EmailAddress == user.Username || x.Username == user.Username)).Returns(activeUser.AsQueryable());
+            mockDataRepository.Setup(repo => repo.GetOneBy<User>(x => x.EmailAddress == user.Username || x.Username == user.Username)).Returns(activeUser.AsQueryable());
             mockDataRepository.Setup(repo => repo.AddAsync(It.IsAny<RefreshToken>())).Returns(Task.CompletedTask);
+            mockDataRepository.Setup(repo => repo.SaveChangesAsync()).Returns(Task.CompletedTask);
             var result = await mockUserController.Login(user);
 
             // Assert
             mockDataRepository.Verify(repo => repo.AddAsync(It.IsAny<RefreshToken>()), Times.Once);
+            mockDataRepository.Verify(repo => repo.SaveChangesAsync(), Times.Once);
             var LoginActionResult = Assert.IsType<OkObjectResult>(result);
             Assert.Equal(200, LoginActionResult.StatusCode);
         }
@@ -89,13 +92,15 @@ namespace Backend.tests.ControllerTests
 
             // Act
             mockCurrentUserService.Setup(service => service.GetUserDetails()).Returns(user);
-            mockDataRepository.Setup(repo => repo.GetOneByAsync<RefreshToken>(x => x.Id == user.Id)).Returns(refreshToken.AsQueryable());
+            mockDataRepository.Setup(repo => repo.GetOneBy<RefreshToken>(x => x.Id == user.Id)).Returns(refreshToken.AsQueryable());
             mockDataRepository.Setup(repo => repo.Update(refreshToken.FirstOrDefault()!)).Verifiable();
+            mockDataRepository.Setup(repo => repo.SaveChangesAsync()).Returns(Task.CompletedTask);
 
             var result = await mockUserController.Logout();
 
             // Assert
             mockDataRepository.Verify(repo => repo.Update(It.IsAny<RefreshToken>()), Times.Once);
+            mockDataRepository.Verify(repo => repo.SaveChangesAsync(), Times.Once);
             var LogoutActionResult = Assert.IsType<OkObjectResult>(result);
             Assert.Equal(200, LogoutActionResult.StatusCode);
         }
@@ -107,7 +112,7 @@ namespace Backend.tests.ControllerTests
             var users = new List<User>() { new() { Id = 1 } };
 
             // Act
-            mockDataRepository.Setup(repo => repo.GetOneByAsync<User>(x => x.Id == id)).Returns(users.AsQueryable());
+            mockDataRepository.Setup(repo => repo.GetOneBy<User>(x => x.Id == id)).Returns(users.AsQueryable());
 
             var result = await mockUserController.GetUserById(id);
 
@@ -124,13 +129,15 @@ namespace Backend.tests.ControllerTests
 
             // Act
             mockCurrentUserService.Setup(service => service.GetUserDetails()).Returns(user);
-            mockDataRepository.Setup(repo => repo.GetOneByAsync<User>(x => x.Id == user.Id || x.EmailAddress == user.EmailAddress)).Returns(new List<User>() { user }.AsQueryable());
+            mockDataRepository.Setup(repo => repo.GetOneBy<User>(x => x.Id == user.Id || x.EmailAddress == user.EmailAddress)).Returns(new List<User>() { user }.AsQueryable());
             mockDataRepository.Setup(repo => repo.Update(It.IsAny<User>())).Verifiable();
+            mockDataRepository.Setup(repo => repo.SaveChangesAsync()).Returns(Task.CompletedTask);
 
             var result = await mockUserController.UpdateUser(ModifiedUserDetails);
 
             // Assert
             mockDataRepository.Verify(repo => repo.Update(It.IsAny<User>()), Times.Once);
+            mockDataRepository.Verify(repo => repo.SaveChangesAsync(), Times.Once);
             var UpdateActionResult = Assert.IsType<OkObjectResult>(result);
             Assert.Equal(200, UpdateActionResult.StatusCode);
         }
@@ -157,13 +164,15 @@ namespace Backend.tests.ControllerTests
 
             // Act
             mockCurrentUserService.Setup(service => service.GetUserDetails()).Returns(currentUser);
-            mockDataRepository.Setup(repo => repo.GetOneByAsync<User>(x => x.Id == currentUser.Id || x.EmailAddress == currentUser.EmailAddress)).Returns(new List<User>() { currentUser }.AsQueryable());
+            mockDataRepository.Setup(repo => repo.GetOneBy<User>(x => x.Id == currentUser.Id || x.EmailAddress == currentUser.EmailAddress)).Returns(new List<User>() { currentUser }.AsQueryable());
             mockDataRepository.Setup(repo => repo.Update(It.IsAny<User>()));
+            mockDataRepository.Setup(repo => repo.SaveChangesAsync()).Returns(Task.CompletedTask);
 
             var result = await mockUserController.Password(changedPassword);
 
             // Assert
             mockDataRepository.Verify(repo => repo.Update(It.IsAny<User>()), Times.Once);
+            mockDataRepository.Verify(repo => repo.SaveChangesAsync(), Times.Once);
             var PasswordActionResult = Assert.IsType<OkObjectResult>(result);
             Assert.Equal(200, PasswordActionResult.StatusCode);
         }
@@ -175,14 +184,17 @@ namespace Backend.tests.ControllerTests
             var token = new RefreshToken(refreshToken, 1) { User = new User() { Id = 1, EmailAddress = "john.doe@example.com" } };
 
             // Act
-            mockDataRepository.Setup(repo => repo.GetOneByAsync<RefreshToken>(x => x.Token == refreshToken && x.IsValid == true)).Returns(new List<RefreshToken>() { token }.AsQueryable());
+            mockDataRepository.Setup(repo => repo.GetOneBy<RefreshToken>(x => x.Token == refreshToken && x.IsValid == true)).Returns(new List<RefreshToken>() { token }.AsQueryable());
             mockDataRepository.Setup(repo => repo.Update(It.IsAny<RefreshToken>())).Verifiable();
             mockDataRepository.Setup(repo => repo.AddAsync(It.IsAny<RefreshToken>())).Returns(Task.CompletedTask);
+            mockDataRepository.Setup(repo => repo.SaveChangesAsync()).Returns(Task.CompletedTask);
 
             var result = await mockUserController.RefreshToken(refreshToken);
 
             // Assert
             mockDataRepository.Verify(repo => repo.AddAsync(It.IsAny<RefreshToken>()), Times.Once);
+            mockDataRepository.Verify(repo => repo.Update(It.IsAny<RefreshToken>()), Times.Never);
+            mockDataRepository.Verify(repo => repo.SaveChangesAsync(), Times.Once);
             var RefreshTokenActionResult = Assert.IsType<OkObjectResult>(result);
             Assert.Equal(200, RefreshTokenActionResult.StatusCode);
         }
@@ -194,13 +206,15 @@ namespace Backend.tests.ControllerTests
 
             // Act
             mockCurrentUserService.Setup(service => service.GetUserDetails()).Returns(user);
-            mockDataRepository.Setup(repo => repo.GetOneByAsync<User>(x => x.Id == user.Id || x.EmailAddress == user.EmailAddress)).Returns(new List<User>() { user }.AsQueryable());
+            mockDataRepository.Setup(repo => repo.GetOneBy<User>(x => x.Id == user.Id || x.EmailAddress == user.EmailAddress)).Returns(new List<User>() { user }.AsQueryable());
             mockDataRepository.Setup(repo => repo.Delete(It.IsAny<User>())).Verifiable();
+            mockDataRepository.Setup(repo => repo.SaveChangesAsync()).Returns(Task.CompletedTask);
 
             var result = await mockUserController.DeleteUser();
 
             // Assert
             mockDataRepository.Verify(repo => repo.Delete(It.IsAny<User>()), Times.Once);
+            mockDataRepository.Verify(repo => repo.SaveChangesAsync(), Times.Once);
             var DeleteActionResult = Assert.IsType<OkObjectResult>(result);
             Assert.Equal(200, DeleteActionResult.StatusCode);
         }

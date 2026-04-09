@@ -12,7 +12,7 @@ namespace Backend.Repositories.DataRepository
         Task AddAsync<T>(T entity) where T: class;
         Task<IList<T>> GetAsync<T>() where T : class;
         Task<IList<T>> GetByAsync<T>(Expression<Func<T, bool>> expression) where T : class;
-        IQueryable<T> GetOneByAsync<T>(Expression<Func<T, bool>> expression) where T : class;
+        IQueryable<T> GetOneBy<T>(Expression<Func<T, bool>> expression) where T : class;
         IQueryable<T> GetBy<T>(Expression<Func<T, bool>> expression) where T : class;
         IQueryable<T> GetAll<T>() where T : class;
         Task SaveChangesAsync();
