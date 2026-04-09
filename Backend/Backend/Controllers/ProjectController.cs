@@ -12,7 +12,7 @@ namespace Backend.Controllers
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class ProjectController(IDataRepository DataRepository, ICurrentUserService CurrentUserService) : ControllerBase
+    public class ProjectController(IDataRepository DataRepository) : ControllerBase
     {
         // POST: api/Project
         [HttpPost]
@@ -224,7 +224,7 @@ namespace Backend.Controllers
 
                     if (sortedProjectStages[i].StageNumber == sortedStages[i].StageNumber)
                     {
-                        stagesToDelete.Add(sortedProjectStages[j]);
+                        stagesToDelete.Add(sortedProjectStages[i]);
                     }
                 }
 

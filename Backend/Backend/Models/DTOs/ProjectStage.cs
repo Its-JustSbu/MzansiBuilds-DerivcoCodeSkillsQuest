@@ -42,5 +42,6 @@ namespace Backend.Models.DTOs
             {
                 StageStatus = null;
             }
+        }
     }
 }
