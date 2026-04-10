@@ -84,6 +84,28 @@ namespace Backend.Controllers
                 throw;
             }
         }
+        // POST: api/Project/{ProjectStageId}/milestone
+        [HttpPost("{ProjectStageId}/milestone")]
+        public async Task<IActionResult> CreateMilestone(int ProjectStageId, MilestoneView milestone)
+        {
+            try
+            {
+                var projectStage = DataRepository.GetOneBy<ProjectStage>(s => s.Id == ProjectStageId).FirstOrDefault();
+
+                if (projectStage == null) return NotFound("Project stage not found");
+
+                var newMilestone = new Milestone(milestone) { ProjectStageId = ProjectStageId };
+                await DataRepository.AddAsync(newMilestone);
+                await DataRepository.SaveChangesAsync();
+
+                return CreatedAtAction(nameof(CreateMilestone), new { ProjectStageId, id = newMilestone.Id }, newMilestone);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error");
+                throw;
+            }
+        }
         // GET: api/Projects
         // TODO: Add SignalR for real-time updates to projects list
         [HttpGet("{pageNumber}")]
@@ -183,6 +205,28 @@ namespace Backend.Controllers
                 throw;
             }
         }
+        // PUT: api/Project/{MilestoneId}/milestone
+        [HttpPut("{MilestoneId}/milestone")]
+        public async Task<IActionResult> UpdateMilestone(int MilestoneId, MilestoneView updatedMilestone)
+        {
+            try
+            {
+                var milestone = DataRepository.GetOneBy<Milestone>(m => m.Id == MilestoneId).FirstOrDefault();
+
+                if (milestone == null) return NotFound("Milestone not found");
+
+                milestone.UpdateMilestone(updatedMilestone.Description!, updatedMilestone.ProjectStage!);
+                DataRepository.Update(milestone);
+                await DataRepository.SaveChangesAsync();
+
+                return Ok(new { message = "Milestone updated successfully" });
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error");
+                throw;
+            }
+        }
         // DELETE: api/Project/{id}
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProject(int id)
@@ -204,7 +248,7 @@ namespace Backend.Controllers
                 throw;
             }
         }
-        // DELETE: api/Project/{ProjectId}/{StageId}/stage
+        // DELETE: api/Project/{ProjectId}/stage
         [HttpDelete("{ProjectId}/stage")]
         public async Task<IActionResult> DeleteProjectStage(int ProjectId, List<StagesView> stages)
         {
@@ -239,7 +283,7 @@ namespace Backend.Controllers
                 throw;
             }
         }
-        // DELETE: api/Project/{ProjectId}/{SupportId}/support
+        // DELETE: api/Project/{SupportId}/support
         [HttpDelete("{SupportId}/support")]
         public async Task<IActionResult> DeleteSupportRequest(int SupportId)
         {
@@ -253,6 +297,26 @@ namespace Backend.Controllers
                 await DataRepository.SaveChangesAsync();
 
                 return Ok(new { message = "Support request deleted successfully" });
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error");
+                throw;
+            }
+        }
+        // DELETE: api/Project/{MilestoneId}/milestone
+        public async Task<IActionResult> DeleteMilestone(int MilestoneId)
+        {
+            try
+            {
+                var milestone = DataRepository.GetOneBy<Milestone>(m => m.Id == MilestoneId).FirstOrDefault();
+
+                if (milestone == null) return NotFound("Milestone not found");
+
+                DataRepository.Delete(milestone);
+                await DataRepository.SaveChangesAsync();
+
+                return Ok(new { message = "Milestone deleted successfully" });
             }
             catch (Exception)
             {

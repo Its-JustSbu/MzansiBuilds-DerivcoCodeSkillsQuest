@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Backend.Models.Views;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Backend.Models.DTOs
@@ -22,6 +23,27 @@ namespace Backend.Models.DTOs
         [DataType(DataType.DateTime)]
         public DateTime JoinedAt { get; set; } = DateTime.Now;
         public bool IsOwner { get; set; }
+        public Collaboration() { }
+        public Collaboration(CreateCollaboratorView createCollaboratorView, Project project, User user)
+        {
+            if (createCollaboratorView.RequestStatus != null)
+            {
+                RequestStatusId = createCollaboratorView.RequestStatus.Id;
+            }
+            if (createCollaboratorView.CollaboratorType != null)
+            {
+                CollaboratorTypeId = createCollaboratorView.CollaboratorType.Id;
+            }
+            if (project != null)
+            {
+                Project = project;
+            }
+            if (user != null)
+            {
+                User = user;
+            }
+            IsOwner = createCollaboratorView.IsOwner;
+        }
         public void UpdatedCollaboration(int requestStatusId, int collaboratorTypeId, bool isOwner)
         {
             RequestStatusId = requestStatusId;

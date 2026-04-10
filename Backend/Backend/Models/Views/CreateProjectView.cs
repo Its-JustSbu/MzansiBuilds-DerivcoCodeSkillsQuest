@@ -27,6 +27,7 @@ namespace Backend.Models.Views
     {
         [Required, MaxLength(255)]
         public string? Description { get; set; }
+        public ProjectStage? ProjectStage { get; set; } = null;
     }
     public class  SupportView
     {

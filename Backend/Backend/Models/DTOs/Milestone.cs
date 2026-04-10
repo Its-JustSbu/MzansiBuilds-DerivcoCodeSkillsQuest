@@ -20,14 +20,14 @@ namespace Backend.Models.DTOs
         {
             Description = milestone.Description;
         }
-        public void UpdateMilestone(string description, int projectStageId)
+        public void UpdateMilestone(string description, ProjectStage projectStage)
         {
-            ProjectStageId = projectStageId;
             Description = description;
             ModifiedAt = DateTime.Now;
-            if (ProjectStage != null)
+            if (projectStage != null)
             {
-                ProjectStage = null;
+                ProjectStage = projectStage;
+                ProjectStageId = projectStage.Id;
             }
         }
     }

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Backend.Models.Views;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Backend.Models.DTOs
@@ -19,6 +20,20 @@ namespace Backend.Models.DTOs
         public string? Description { get; set; }
         [DataType(DataType.DateTime)]
         public DateTime CreatedAt { get; set; } = DateTime.Now;
+        public Comment() { }
+        public Comment(CreateCommentView createCommentView, Project project, User user) 
+        {
+            if (project != null)
+            {
+                Project = project;
+            }
+            if (user != null)
+            {
+                User = user;
+            }
+            Title = createCommentView.Title;
+            Description = createCommentView.Description;
+        }
         public void UpdateComment(string title, string description)
         {
             Title = title;
