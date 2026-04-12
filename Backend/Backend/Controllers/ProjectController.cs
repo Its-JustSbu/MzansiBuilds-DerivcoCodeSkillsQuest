@@ -305,6 +305,7 @@ namespace Backend.Controllers
             }
         }
         // DELETE: api/Project/{MilestoneId}/milestone
+        [HttpDelete("{MilestoneId}/milestone")]
         public async Task<IActionResult> DeleteMilestone(int MilestoneId)
         {
             try

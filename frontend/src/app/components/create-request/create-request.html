@@ -1,0 +1,12 @@
+<div>
+  <h2 mat-dialog-title>Send Collaboration Request for {{ project.name }}?</h2>
+  <mat-dialog-content>
+    <p>Are you sure you would like to collaborate on the {{ project.name }} project?</p>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button type="button" matButton="outlined" (click)="onClose()">No</button>
+    <button type="button" matButton="filled" [mat-dialog-close]="sendRequest()" cdkFocusInitial>
+      Yes
+    </button>
+  </mat-dialog-actions>
+</div>

@@ -1,0 +1,46 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav
+    #drawer
+    class="sidenav"
+    fixedInViewport
+    [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+    [mode]="(isHandset$ | async) ? 'over' : 'side'"
+    [opened]="(isHandset$ | async) === false"
+  >
+    <mat-toolbar>MzansiBuilds</mat-toolbar>
+    <mat-nav-list class="nav-list">
+      <a mat-list-item routerLink="/portal/home" [routerLinkActive]="'active-link'">
+        <mat-icon matListItemIcon>home</mat-icon>
+        <span matListItemTitle>Home</span>
+      </a>
+      <a mat-list-item routerLink="/portal/projects" [routerLinkActive]="'active-link'">
+        <mat-icon matListItemIcon>build</mat-icon>
+        <span matListItemTitle>My Projects</span>
+      </a>
+      <a mat-list-item routerLink="/portal/celebrations" [routerLinkActive]="'active-link'">
+        <mat-icon matListItemIcon>star</mat-icon>
+        <span matListItemTitle>Celebration Board</span>
+      </a>
+      <a mat-list-item routerLink="/portal/profile" [routerLinkActive]="'active-link'">
+        <mat-icon matListItemIcon>person</mat-icon>
+        <span matListItemTitle>Profile</span>
+      </a>
+      <a mat-list-item>
+        <mat-icon matListItemIcon>exit_to_app</mat-icon>
+        <span matListItemTitle>Logout</span>
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    @if (isHandset$ | async) {
+      <mat-toolbar>
+        <button type="button" aria-label="Toggle sidenav" matIconButton (click)="drawer.toggle()">
+          <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+        </button>
+        <span>MzansiBuilds</span>
+      </mat-toolbar>
+    }
+    <!-- Add Content Here -->
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>

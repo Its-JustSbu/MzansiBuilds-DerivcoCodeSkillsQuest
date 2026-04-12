@@ -1,0 +1,57 @@
+<main class="register-container mat-bg-secondary">
+  <div class="register-form mat-bg-tertiary mat-elevation-z12">
+    <form (ngSubmit)="register()">
+      <h1 class="register-heading">Welcome to MzansiBuilds</h1>
+      <small class="register-subheading">Please enter your valid registeration details.</small>
+
+      <div class="names-container">
+        <mat-form-field color="accent" appearance="outline" style="padding-right: 12px;">
+          <mat-label>First Name</mat-label>
+          <input matInput placeholder="John" />
+          <mat-icon matSuffix>account_box</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field color="accent" appearance="outline" style="padding-left: 12px;">
+          <mat-label>Surname</mat-label>
+          <input matInput placeholder="Doe" />
+          <mat-icon matSuffix>account_box</mat-icon>
+        </mat-form-field>
+      </div>
+
+      <mat-form-field color="accent" appearance="outline">
+        <mat-label>Username</mat-label>
+        <input matInput placeholder="John@Example.com" />
+        <mat-icon matSuffix>account_box</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field color="accent" appearance="outline">
+        <mat-label>Email</mat-label>
+        <input matInput placeholder="John@Example.com" />
+        <mat-icon matSuffix>alternate_email</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Password</mat-label>
+        <input matInput placeholder="Enter password" />
+        <mat-icon matSuffix>lock</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Confirm Password</mat-label>
+        <input matInput placeholder="Enter password" />
+        <mat-icon matSuffix>lock</mat-icon>
+      </mat-form-field>
+
+      <button matFab extended type="submit">
+        Register
+        <mat-icon matSuffix>create</mat-icon>
+      </button>
+    </form>
+    <p class="register-text">
+      <small
+        >Already have an account?
+        <a style="color: white" [routerLink]="['/login']">Login Here!</a></small
+      >
+    </p>
+  </div>
+</main>

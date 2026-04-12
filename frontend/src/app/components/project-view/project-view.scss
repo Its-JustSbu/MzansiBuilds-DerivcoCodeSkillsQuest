@@ -1,0 +1,87 @@
+.container {
+  padding: 24px;
+  background: var(--mat-sys-shadow);
+  height: 100%;
+  overflow: auto;
+}
+.table-container {
+  width: 100%;
+}
+.grid-header {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+}
+.grid-header-text {
+  text-align: left;
+  width: 100%;
+}
+.grid-header-text h2 {
+  font-weight: bold;
+}
+.grid-header-text p {
+  font-weight: lighter;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-auto-rows: min-content; /* This is the true 'auto' height */
+  gap: 16px;
+}
+.grid-footer {
+  justify-content: flex-end;
+}
+.grid .grid-header,
+.grid .grid-footer {
+  grid-column: span 2;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+.grid-header button {
+  position: absolute;
+  top: 20px;
+  right: 5px;
+}
+.grid-footer button {
+  width: clamp(150px, 30vw, 200px);
+  padding: 10px 12px;
+  position: absolute;
+  bottom: 10px;
+  right: 25px;
+}
+
+.colaborators {
+  grid-column: span 2;
+  padding: 20px;
+  padding-top: 0px;
+}
+@media (max-width: 600px) {
+  .grid {
+    grid-template-columns: repeat(1, 1fr);
+  }
+  .grid .grid-header,
+  .grid .grid-footer,
+  .colaborators {
+    grid-column: span 1;
+  }
+}
+.request-button {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  background: var(--mat-sys-primary-container);
+  color: var(--mat-sys-shadow);
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  border-radius: 30px;
+  margin: 8px;
+}
+.request-button:hover {
+  padding: 16px;
+  margin: 8px;
+  -webkit-box-shadow: -4px 5px 13px -1px var(--mat-sys-primary);
+  box-shadow: -4px 5px 13px -1px var(--mat-sys-primary) !important;
+}

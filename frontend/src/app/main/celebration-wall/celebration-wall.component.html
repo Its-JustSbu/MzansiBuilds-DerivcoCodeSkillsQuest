@@ -1,0 +1,10 @@
+<div class="grid-container">
+  <h1 class="mat-h1">Welcome to the Celebration Wall</h1>
+  <mat-grid-list cols="{{cols}}" rowHeight="300px">
+    @for (card of cards() ; track card) {
+      <mat-grid-tile>
+        <app-celebration-card [card]="card"/>
+      </mat-grid-tile>
+    }
+  </mat-grid-list>
+</div>

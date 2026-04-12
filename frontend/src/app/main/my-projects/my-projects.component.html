@@ -1,0 +1,16 @@
+<div class="grid-container">
+  <div class="heading">
+    <h1 class="mat-h1">My Projects</h1>
+    <button matButton="elevated" (click)="openAdd()">
+      <mat-icon>add</mat-icon>
+      Add Project
+    </button>
+  </div>
+  <mat-grid-list cols="1" rowHeight="200px">
+    @for (card of cards(); track card) {
+      <mat-grid-tile>
+        <app-project-card [isGeneralCard]="false" [card]="card" />
+      </mat-grid-tile>
+    }
+  </mat-grid-list>
+</div>

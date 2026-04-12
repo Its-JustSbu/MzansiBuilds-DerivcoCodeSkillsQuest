@@ -1,0 +1,40 @@
+<mat-card class="dashboard-card">
+  <mat-card-header>
+    <mat-card-title> Congratulations! Project {{ card.name }} Completed! 🥳 </mat-card-title>
+  </mat-card-header>
+  <mat-card-content class="dashboard-card-content">
+    <div class="stats-row">
+      <div class="stat-cell">
+        <span class="stat-value">{{ getNumberOfMilestones(card.stages) }}</span>
+        <span class="stat-label">Number Milestones Achieved</span>
+      </div>
+      <div class="stat-cell">
+        <span class="stat-value">{{ card.stages?.length }}</span>
+        <span class="stat-label">Number of Stages</span>
+      </div>
+      <div class="stat-cell">
+        <span>{{ card.support?.length }}</span>
+        <span class="stat-label">Number of Support Required</span>
+      </div>
+    </div>
+    <div class="footer">
+      <mat-divider></mat-divider>
+      <div class="collaborators-row">
+        <div class="avatar-stack">
+          <span class="avatar">JD</span>
+          <span class="avatar">KL</span>
+          <span class="avatar">MR</span>
+          <span class="avatar avatar-more">+4</span>
+        </div>
+        <button matButton [matMenuTriggerFor]="menu" aria-label="Toggle menu">
+          View collaborators
+        </button>
+        <mat-menu #menu="matMenu" xPosition="before">
+            <mat-list-item>Item 1</mat-list-item>
+            <mat-list-item>Item 2</mat-list-item>
+            <mat-list-item>Item 3</mat-list-item>
+        </mat-menu>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

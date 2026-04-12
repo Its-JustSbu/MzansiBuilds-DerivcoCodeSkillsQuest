@@ -1,0 +1,29 @@
+.sidenav-container {
+  height: 100%;
+}
+
+.sidenav {
+  width: 216px;
+  background-color: var(--mat-sys-shadow);
+  border-radius: 0px 5px 5px 0px;
+}
+
+.sidenav .mat-toolbar {
+  background-color: inherit;
+  color: var(--mat-sys-primary-container);
+}
+
+.nav-list {
+  --mdc-list-list-item-label-text-color: var(--mat-sys-primary-container);;
+  --mdc-list-list-item-hover-label-text-color: var(--mat-sys-primary-container);;
+}
+
+.nav-list [activated] {
+  --mdc-list-list-item-label-text-color: var(--mat-sys-primary-container);;
+}
+
+.mat-toolbar.mat-primary {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}

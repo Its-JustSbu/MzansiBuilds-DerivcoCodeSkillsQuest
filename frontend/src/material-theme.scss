@@ -1,0 +1,192 @@
+// Include theming for Angular Material with `mat.theme()`.
+// This Sass mixin will define CSS variables that are used for styling Angular Material
+// components according to the Material 3 design spec.
+// Learn more about theming and how to use it for your application's
+// custom components at https://material.angular.dev/guide/theming
+@use '@angular/material' as mat;
+@use './_theme-colors' as theme;
+@include mat.elevation-classes();
+
+:root {
+  @include mat.elevation-classes();
+  @include mat.dialog-overrides(
+    (
+      container-color: var(--mat-sys-shadow),
+      subhead-color: var(--mat-sys-primary-container),
+      supporting-text-color: var(--mat-sys-primary-container),
+    )
+  );
+  @include mat.button-overrides(
+    (
+      filled-container-color: var(--mat-sys-primary),
+      text-label-text-color: var(--mat-sys-primary-container),
+    )
+  );
+}
+
+html {
+  height: 100%;
+  @include mat.theme(
+    (
+      color: (
+        primary: theme.$primary-palette,
+        tertiary: theme.$tertiary-palette,
+      ),
+      typography: Roboto,
+      density: 0,
+    )
+  );
+
+  @media (prefers-contrast: more) {
+    @include theme.high-contrast-overrides(dark);
+  }
+}
+
+body {
+  // Default the application to a light color theme. This can be changed to
+  // `dark` to enable the dark color theme, or to `light dark` to defer to the
+  // user's system settings.
+  color-scheme: light;
+
+  // Set a default background, font and text colors for the application using
+  // Angular Material's system-level CSS variables. Learn more about these
+  // variables at https://material.angular.dev/guide/system-variables
+  background-color: var(--mat-sys-surface);
+  color: var(--mat-sys-primary-container);
+  font: var(--mat-sys-body-medium);
+  --mat-menu-container-color: var(--mat-sys-tertiary);
+  --mat-menu-item-label-text-color: var(--mat-sys-primary-container);
+  // Reset the user agent margin.
+  margin: 0;
+  height: 100%;
+}
+
+mat-form-field {
+  @include mat.form-field-overrides(
+    (
+      outlined-outline-color: var(--mat-sys-primary-container),
+      filled-focus-active-indicator-color: var(--mat-sys-primary-container),
+      outlined-focus-outline-color: var(--mat-sys-primary-container),
+    )
+  );
+}
+
+.mat-bg-primary {
+  background-color: var(--mat-sys-primary-container);
+}
+
+.mat-bg-secondary {
+  background-color: var(--mat-sys-secondary-container);
+}
+
+.mat-bg-tertiary {
+  background-color: var(--mat-sys-shadow);
+}
+
+input.mat-mdc-input-element {
+  color: var(--mat-sys-primary-container) !important;
+}
+.mat-mdc-form-field:hover .mdc-notched-outline__leading,
+.mat-mdc-form-field:hover .mdc-notched-outline__notch,
+.mat-mdc-form-field:hover .mdc-notched-outline__trailing {
+  border-color: var(--mat-sys-primary) !important; /* Your desired hover color */
+}
+.mat-mdc-list-item-icon,
+.mat-mdc-list-item-title {
+  color: var(--mat-sys-primary-container) !important;
+}
+.mat-mdc-dialog-container .mdc-dialog__surface {
+  border-radius: 0px;
+  -webkit-box-shadow: 1px 1px 2px 4px var(--mat-sys-primary-container);
+  box-shadow: 1px 1px 2px 4px var(--mat-sys-primary-container) !important;
+}
+.mat-mdc-header-row {
+  background-color: var(--mat-sys-shadow) !important;
+}
+.mat-mdc-header-cell {
+  color: var(--mat-sys-primary-container);
+}
+/* Odd rows */
+.mat-mdc-row:nth-child(odd) {
+  background-color: var(--mat-sys-primary);
+  color: var(--mat-sys-secondary-container);
+}
+/* Even rows */
+.mat-mdc-row:nth-child(even) {
+  background-color: var(--mat-sys-shadow);
+  color: var(--mat-sys-primary-container);
+}
+@media (max-width: 600px) {
+  .mat-mdc-table {
+    font-size: clamp(0.75rem, 2vw, 1rem); /* Scales between 0.75rem and 1rem */
+  }
+
+  .mat-mdc-header-cell,
+  .mat-mdc-cell {
+    font-size: 12px; /* Specific override if needed */
+  }
+}
+.mat-mdc-table {
+  border: 0px solid var(--mat-sys-primary-container);
+  border-radius: 9px; /* Optional: Rounded corners */
+  overflow: hidden; /* Prevents row borders from overlapping rounded corners */
+  -webkit-box-shadow: -4px 5px 13px -1px var(--mat-sys-primary-container);
+  box-shadow: -4px 5px 13px -1px var(--mat-sys-primary-container) !important;
+}
+.error {
+  background: #ae1919;
+  color: var(--mat-sys-secondary);
+  text-align: center;
+  align-items: center;
+  padding: 10px;
+  justify-content: center;
+  border-radius: 30px;
+  margin: 8px;
+}
+.error:hover {
+  padding: 15px;
+  -webkit-box-shadow: -4px 5px 13px -1px var(--mat-sys-tertiary);
+  box-shadow: -4px 5px 13px -1px var(--mat-sys-tertiary) !important;
+}
+.no-btn {
+  background-color: var(--mat-sys-error-container);
+  color: var(--mat-sys-on-error-container);
+  border: 0px;
+  border-radius: 30px;
+  padding: 10px;
+  margin: 8px;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+}
+.no-btn:hover {
+  padding: 8px;
+  -webkit-box-shadow: -4px 5px 13px -1px var(--mat-sys-error);
+  box-shadow: -4px 5px 13px -1px var(--mat-sys-error) !important;
+}
+
+/* Yes button — uses primary palette to signal a confirmation action */
+.yes-btn {
+  background-color: var(--mat-sys-primary);
+  color: var(--mat-sys-on-primary);
+  border-radius: 30px;
+  border: 0;
+  margin: 8px;
+  padding: 10px;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+}
+.yes-btn:hover {
+  padding: 8px;
+  -webkit-box-shadow: -4px 5px 13px -1px var(--mat-sys-primary-container);
+  box-shadow: -4px 5px 13px -1px var(--mat-sys-primary-container) !important;
+}
+.mat-mdc-card {
+  color: var(--mat-sys-primary-container);
+  border-radius: 0px !important;
+  background-color: var(--mat-sys-shadow) !important;
+  -webkit-box-shadow: -9px 9px 2px 0px var(--mat-sys-primary-container);
+  box-shadow: -9px 9px 2px 0px var(--mat-sys-primary-container) !important;
+}
+

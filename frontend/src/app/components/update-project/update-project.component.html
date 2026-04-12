@@ -1,0 +1,111 @@
+<div class="main-container">
+  <h2 style="width: 100%; text-align: center">Update Project</h2>
+  <form class="grid-container">
+    <div class="project-form">
+      <h2>Project Details</h2>
+      <div class="project-form-group">
+        <mat-form-field appearance="outline">
+          <mat-label>Enter Project Name</mat-label>
+          <input matInput placeholder="Project Name" />
+          <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Enter Project Description</mat-label>
+          <textarea matInput placeholder="Project Description"></textarea>
+        </mat-form-field>
+      </div>
+      <button matIconButton matSuffix (click)="onClose()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="container">
+      <h2>Project Steps</h2>
+      @if (project.stages) {
+        <div
+          cdkDropList
+          #todoList="cdkDropList"
+          [cdkDropListData]="project.stages"
+          class="list"
+          (cdkDropListDropped)="drop($event)"
+          style="margin-bottom: 15px"
+        >
+          @for (stage of project.stages; track stage) {
+            <div class="list-item" cdkDrag>
+              <span>
+                <mat-icon>drag_indicator</mat-icon>
+              </span>
+              <input type="checkbox" id="item-check" />
+              <label for="item-check">
+                {{ stage.stageNumber }}. {{ stage.stageTitle }} ({{ stage.stageStatus.name }})
+              </label>
+              <button matIconButton matSuffix (click)="onClose()" style="color: red">
+                <mat-icon>remove</mat-icon>
+              </button>
+            </div>
+          }
+        </div>
+      }
+
+      <div class="support-form-group">
+        <mat-form-field appearance="outline">
+          <mat-label>Enter Stage Number</mat-label>
+          <input matInput placeholder="Stage Number" type="number" />
+          <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Stage Title</mat-label>
+          <input matInput placeholder="Stage Title" />
+          <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+        </mat-form-field>
+        <div class="support-actions">
+          <button matIconButton matSuffix (click)="onClose()" style="color: blue">
+            <mat-icon>add</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div>
+      <h2>Request Project Support</h2>
+      @if (project.support) {
+        <h3>Requests:</h3>
+        <div>
+          @for (support of project.support; track support) {
+            <div
+              class="list-item"
+              style="background-color: white; border-radius: 5px; margin-bottom: 15px"
+            >
+              <input type="checkbox" id="item" />
+              <label for="item"> Request for {{ support.supportType.name }} </label>
+              <button matIconButton matSuffix (click)="onClose()" style="color: red">
+                <mat-icon>remove</mat-icon>
+              </button>
+            </div>
+          }
+        </div>
+      }
+
+      <div class="support-form-group">
+        <mat-form-field appearance="outline">
+          <mat-label>Select Support Type</mat-label>
+          <mat-select>
+            <mat-option value="one">First option</mat-option>
+            <mat-option value="two">Second option</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Enter Support Description</mat-label>
+          <textarea matInput placeholder="Support Description"></textarea>
+        </mat-form-field>
+        <div class="support-actions">
+          <button matIconButton matSuffix (click)="onClose()" style="color: blue">
+            <mat-icon>add</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="actions-group">
+      <button matButton="outlined">Cancel</button>
+      <button matButton="tonal">Update</button>
+    </div>
+  </form>
+</div>

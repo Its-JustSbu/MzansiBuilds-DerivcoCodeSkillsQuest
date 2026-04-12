@@ -1,0 +1,37 @@
+<main class="login-container mat-bg-secondary">
+  <div class="login-form mat-bg-tertiary mat-elevation-z12">
+    <form (ngSubmit)="login()">
+      <h1 class="login-heading">Welcome to MzansiBuilds</h1>
+      <small class="login-subheading">Please enter your valid login details.</small>
+
+      <mat-form-field color="accent" appearance="outline">
+        <mat-label>Username or Email Address</mat-label>
+        <input matInput placeholder="John@Example.com" />
+        <mat-icon matSuffix>account_box</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Password</mat-label>
+        <input matInput placeholder="Enter password" />
+        <mat-icon matSuffix>lock</mat-icon>
+      </mat-form-field>
+
+      <button matFab extended type="submit">
+        Login
+        <mat-icon matSuffix>keyboard_tab</mat-icon>
+      </button>
+    </form>
+    <!-- <p class="forgot-text">
+      <small
+        >Forgot password?
+        <a style="color: white" (click)="forgotPassword()">Click Here</a></small
+      >
+    </p> -->
+    <p class="register-text">
+      <small
+        >Don't have an account?
+        <a style="color: white" [routerLink]="['/register']">Register Here!</a></small
+      >
+    </p>
+  </div>
+</main>
