@@ -21,11 +21,12 @@ namespace Backend.Controllers
             try
             {
                 var user = currentUserService.GetUserDetails();
+                var currentUser = dataRepository.GetOneBy<User>(x => x.Id == user.Id || x.EmailAddress == user.EmailAddress).FirstOrDefault();
                 var project = dataRepository.GetOneBy<Project>(p => p.Id == ProjectId).FirstOrDefault();
 
-                if (project == null || user == null) return NotFound("Project or User does not exist");
+                if (project == null || currentUser == null) return NotFound("Project or User does not exist");
 
-                var collaboration = new Collaboration(createCollaboratorView, project, user);
+                var collaboration = new Collaboration(createCollaboratorView, project, currentUser);
 
                 await dataRepository.AddAsync(collaboration);
                 await dataRepository.SaveChangesAsync();
@@ -45,11 +46,12 @@ namespace Backend.Controllers
             try
             {
                 var user = currentUserService.GetUserDetails();
+                var currentUser = dataRepository.GetOneBy<User>(x => x.Id == user.Id || x.EmailAddress == user.EmailAddress).FirstOrDefault();
                 var project = dataRepository.GetOneBy<Project>(p => p.Id == ProjectId).FirstOrDefault();
 
-                if (project == null || user == null) return NotFound("Project or User does not exist");
+                if (project == null || currentUser == null) return NotFound("Project or User does not exist");
 
-                var comment = new Comment(createCommentView, project, user);
+                var comment = new Comment(createCommentView, project, currentUser);
 
                 await dataRepository.AddAsync(comment);
                 await dataRepository.SaveChangesAsync();
@@ -69,10 +71,11 @@ namespace Backend.Controllers
             try
             {
                 var user = currentUserService.GetUserDetails();
+                var currentUser = dataRepository.GetOneBy<User>(x => x.Id == user.Id || x.EmailAddress == user.EmailAddress).FirstOrDefault();
 
-                if (user == null) return Forbid("Access Forbidden!");
+                if (currentUser == null) return Forbid("Access Forbidden!");
 
-                var collaborators = dataRepository.GetBy<Collaboration>(x => x.UserId == user.Id)
+                var collaborators = dataRepository.GetBy<Collaboration>(x => x.UserId == currentUser.Id)
                     .Include(x => x.Project)
                     .Include(x => x.RequestStatus)
                     .Include(x => x.CollaboratorType)

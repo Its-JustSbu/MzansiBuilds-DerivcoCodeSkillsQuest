@@ -35,6 +35,7 @@ namespace Backend.tests.ControllerTests
 
             // Act
             mockCurrentUserService.Setup(s => s.GetUserDetails()).Returns(user);
+            mockDataRepository.Setup(x => x.GetOneBy(It.IsAny<Expression<Func<User, bool>>>())).Returns(new List<User> { user }.AsQueryable());
             mockDataRepository.Setup(r => r.GetOneBy<Project>(x => x.Id == projectId)).Returns(new List<Project> { project }.AsQueryable());
             mockDataRepository.Setup(r => r.AddAsync(It.IsAny<Collaboration>())).Returns(Task.CompletedTask);
             mockDataRepository.Setup(r => r.SaveChangesAsync()).Returns(Task.CompletedTask);
@@ -43,6 +44,7 @@ namespace Backend.tests.ControllerTests
 
             // Assert
             mockDataRepository.Verify(r => r.GetOneBy<Project>(x => x.Id == projectId), Times.Once);
+            mockDataRepository.Verify(x => x.GetOneBy(It.IsAny<Expression<Func<User, bool>>>()), Times.Once);
             mockDataRepository.Verify(r => r.AddAsync(It.IsAny<Collaboration>()), Times.Once);
             mockDataRepository.Verify(r => r.SaveChangesAsync(), Times.Once);
             mockCurrentUserService.Verify(s => s.GetUserDetails(), Times.Once);
@@ -59,6 +61,7 @@ namespace Backend.tests.ControllerTests
             // Act
             mockCurrentUserService.Setup(s => s.GetUserDetails()).Returns(user);
             mockDataRepository.Setup(x => x.GetOneBy<Project>(p => p.Id == projectId)).Returns(new List<Project> { project }.AsQueryable());
+            mockDataRepository.Setup(x => x.GetOneBy(It.IsAny<Expression<Func<User, bool>>>())).Returns(new List<User> { user }.AsQueryable());
             mockDataRepository.Setup(x => x.AddAsync(It.IsAny<Comment>())).Returns(Task.CompletedTask);
             mockDataRepository.Setup(x => x.SaveChangesAsync()).Returns(Task.CompletedTask);
 
@@ -67,6 +70,7 @@ namespace Backend.tests.ControllerTests
             // Assert
             mockCurrentUserService.Verify(s => s.GetUserDetails(), Times.Once);
             mockDataRepository.Verify(x => x.GetOneBy<Project>(p => p.Id == projectId), Times.Once);
+            mockDataRepository.Verify(x => x.GetOneBy(It.IsAny<Expression<Func<User, bool>>>()), Times.Once);
             mockDataRepository.Verify(x => x.AddAsync(It.IsAny<Comment>()), Times.Once);
             mockDataRepository.Verify(x => x.SaveChangesAsync(), Times.Once);
             var createdAtActionResult = Assert.IsType<CreatedAtActionResult>(result);
@@ -82,6 +86,7 @@ namespace Backend.tests.ControllerTests
                 new() { Id = 2, Project = new Project { Id = 2 }, ProjectId = 2, User = user, UserId = 1, IsOwner = false, CollaboratorType = new CollaboratorType() { Id = 2 }, CollaboratorTypeId = 2, RequestStatus = new RequestStatus() { Id = 2 }, RequestStatusId = 2 }
             };
             mockCurrentUserService.Setup(s => s.GetUserDetails()).Returns(user);
+            mockDataRepository.Setup(x => x.GetOneBy(It.IsAny<Expression<Func<User, bool>>>())).Returns(new List<User> { user }.AsQueryable());
             mockDataRepository.Setup(r => r.GetBy(It.IsAny<Expression<Func<Collaboration, bool>>>())).Returns(collaborations.AsQueryable());
 
             // Act
@@ -89,6 +94,7 @@ namespace Backend.tests.ControllerTests
 
             // Assert
             mockCurrentUserService.Verify(s => s.GetUserDetails(), Times.Once);
+            mockDataRepository.Verify(x => x.GetOneBy(It.IsAny<Expression<Func<User, bool>>>()), Times.Once);
             mockDataRepository.Verify(r => r.GetBy(It.IsAny<Expression<Func<Collaboration, bool>>>()), Times.Once);
             var okObjectResult = Assert.IsType<OkObjectResult>(result);
             Assert.Equal(200, okObjectResult.StatusCode);

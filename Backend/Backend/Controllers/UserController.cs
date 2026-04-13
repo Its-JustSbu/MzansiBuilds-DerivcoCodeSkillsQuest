@@ -26,7 +26,7 @@ namespace Backend.Controllers
                 await dataRepository.AddAsync(newUser);
                 await dataRepository.SaveChangesAsync();
 
-                return CreatedAtAction("User Successfully Registered", new { id = newUser.Id }, newUser);
+                return CreatedAtAction(nameof(CreateUser), new { id = newUser.Id }, newUser);
             }
             catch (Exception)
             {
@@ -108,7 +108,7 @@ namespace Backend.Controllers
         // PUT: api/User
         [Authorize]
         [HttpPut]
-        public async Task<IActionResult> UpdateUser(UserView user)
+        public async Task<IActionResult> UpdateUser(UpdateUserView? user)
         {
             try
             {
@@ -117,7 +117,7 @@ namespace Backend.Controllers
 
                 if (currentUser == null) return BadRequest("Impossible Action");
 
-                currentUser.UpdateUser(user.Name!, user.Surname!, user.Username!);
+                currentUser.UpdateUser(user!.Name!, user.Surname!, user.Username!);
                 dataRepository.Update(currentUser);
                 await dataRepository.SaveChangesAsync();
 

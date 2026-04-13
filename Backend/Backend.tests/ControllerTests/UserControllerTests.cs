@@ -125,7 +125,7 @@ namespace Backend.tests.ControllerTests
         {
             // Arrange
             var user = new User() { Id = 1, EmailAddress = "johndoe@exampl.com", Name = "John", Surname = "Doe", Username = "JohnDoe425" };
-            var ModifiedUserDetails = new UserView { Name = "Joe", Surname = "Doe", Username = "JoeDoe425" };
+            var ModifiedUserDetails = new UpdateUserView { Name = "Joe", Surname = "Doe", Username = "JoeDoe425" };
 
             // Act
             mockCurrentUserService.Setup(service => service.GetUserDetails()).Returns(user);
