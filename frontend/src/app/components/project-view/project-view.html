@@ -75,16 +75,16 @@
           <div matListItemLine>Posted by User on The date posted.</div>
         </mat-list-item>
       </mat-list>
-      <div class="add-comment">
-        <mat-form-field appearance="outline">
-          <mat-label>Add Comment</mat-label>
-          <input matInput placeholder="Enter comment here" />
-          <mat-icon matSuffix>comment</mat-icon>
-        </mat-form-field>
-        <button matButton="tonal">
-          Add Comment
-        </button>
-      </div>
+      @if (!data.isMine) {
+        <div class="add-comment">
+          <mat-form-field appearance="outline">
+            <mat-label>Add Comment</mat-label>
+            <input matInput placeholder="Enter comment here" />
+            <mat-icon matSuffix>comment</mat-icon>
+          </mat-form-field>
+          <button matButton="tonal">Add Comment</button>
+        </div>
+      }
     </div>
   </div>
 </div>

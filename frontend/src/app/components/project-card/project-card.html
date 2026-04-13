@@ -8,10 +8,9 @@
       <mat-menu #menu="matMenu" xPosition="before">
         <button mat-menu-item (click)="openDetails()">View</button>
         @if (!isGeneralCard) {
-          <button mat-menu-item (click)="markAsComplete()">Mark as Complete</button>
+          <button mat-menu-item (click)="openMilestones()">Update Progress</button>
           <button mat-menu-item (click)="openEdit()">Edit</button>
           <button mat-menu-item (click)="openDelete()">Delete</button>
-          <button mat-menu-item (click)="openMilestones()">Milestones</button>
         } @else {
           <button mat-menu-item (click)="openRequestModal()">Request Access</button>
         }

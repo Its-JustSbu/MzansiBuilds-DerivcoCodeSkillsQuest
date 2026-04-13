@@ -8,7 +8,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { projectDialogData, ProjectView } from '../project-view/project-view';
 import { CreateRequest } from '../create-request/create-request';
 import { UpdateProjectComponent } from '../update-project/update-project.component';
-import { DeletePopUp } from '../delete-pop-up/delete-pop-up';
+import { deleteModalData, DeletePopUp } from '../delete-pop-up/delete-pop-up';
 import { ManageMilestones } from '../manage-milestones/manage-milestones';
 
 @Component({
@@ -44,7 +44,12 @@ export class ProjectCard {
 
   openDelete() {
     this.dialog.open(DeletePopUp, {
-      data: this.card as ProjectViewDTO,
+      data: {
+        message: `Are you sure you would like to delete ${this.card.name}?`,
+        subMessage:
+          'Once this is done, it can not be undone, all collabs and comments will be removed.',
+        apiUri: '{REMEMBER API URI}',
+      } as deleteModalData,
       maxWidth: '50vw',
       width: '100%',
       maxHeight: '560px',
