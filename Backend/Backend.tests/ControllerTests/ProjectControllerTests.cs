@@ -2,10 +2,12 @@
 using Backend.Models.DTOs;
 using Backend.Models.Views;
 using Backend.Repositories.DataRepository;
+using Backend.Services.CurrentUserService;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Text;
 
 namespace Backend.tests.ControllerTests
@@ -13,11 +15,13 @@ namespace Backend.tests.ControllerTests
     public class ProjectControllerTests
     {
         private Mock<IDataRepository> mockDataRepository;
+        private Mock<ICurrentUserService> mockCurrentUserService;
         private ProjectController mockProjectController;
         public ProjectControllerTests()
         {
             mockDataRepository = new Mock<IDataRepository>();
-            mockProjectController = new ProjectController(mockDataRepository.Object);
+            mockCurrentUserService = new Mock<ICurrentUserService>();
+            mockProjectController = new ProjectController(mockDataRepository.Object, mockCurrentUserService.Object);
         }
         // Global Arrange
         public static List<Project> projects = [
@@ -62,8 +66,11 @@ namespace Backend.tests.ControllerTests
                     new() { Description = "This is support 2", SupportType = supportTypes[1] }
                 ]
             };
+            User user = new() { Id = 1, EmailAddress = "john.doe@example.com" };
 
             // Act
+            mockCurrentUserService.Setup(s => s.GetUserDetails()).Returns(user);
+            mockDataRepository.Setup(x => x.GetOneBy(It.IsAny<Expression<Func<User, bool>>>())).Returns(new List<User> { user }.AsQueryable());
             mockDataRepository.Setup(repo => repo.AddAsync(It.IsAny<Project>())).Returns(Task.CompletedTask);
             mockDataRepository.Setup(repo => repo.SaveChangesAsync()).Returns(Task.CompletedTask);
 
@@ -72,6 +79,7 @@ namespace Backend.tests.ControllerTests
             // Assert
             mockDataRepository.Verify(repo => repo.AddAsync(It.IsAny<Project>()), Times.Once);
             mockDataRepository.Verify(repo => repo.SaveChangesAsync(), Times.Once);
+            mockCurrentUserService.Verify(s => s.GetUserDetails(), Times.Once);
             var createdAtActionResult = Assert.IsType<CreatedAtActionResult>(result);
             Assert.Equal(201, createdAtActionResult.StatusCode);
         }
@@ -141,7 +149,7 @@ namespace Backend.tests.ControllerTests
                 new() { Id = 1, Description = "This is a milestone", ProjectStage = new ProjectStage() { Id = ProjectStageId } },
                 new() { Id = 2, Description = "This is another milestone", ProjectStage = new ProjectStage() { Id = ProjectStageId } },
             };
-            var newMilestone = new MilestoneView() { Description = "This is a new milestone", ProjectStage = new ProjectStage() { Id = ProjectStageId } };
+            var newMilestone = new MilestoneView() { Description = "This is a new milestone" };
 
             // Act
             mockDataRepository.Setup(repo => repo.GetOneBy<ProjectStage>(p => p.Id == ProjectStageId)).Returns(new List<ProjectStage>() { new() { Id = ProjectStageId } }.AsQueryable());
@@ -253,7 +261,7 @@ namespace Backend.tests.ControllerTests
         {
             // Arrange
             var existingMilestone = new List<Milestone>() { new() { Id = MilestoneId, Description = "This is a milestone", ProjectStage = new ProjectStage() { Id = 1 } } };
-            var updatedMilestone = new MilestoneView() { Description = "This is the updated milestone", ProjectStage = new ProjectStage() { Id = 2 } };
+            var updatedMilestone = new MilestoneView() { Description = "This is the updated milestone" };
 
             // Act
             mockDataRepository.Setup(repo => repo.GetOneBy<Milestone>(m => m.Id == MilestoneId)).Returns(existingMilestone.AsQueryable());

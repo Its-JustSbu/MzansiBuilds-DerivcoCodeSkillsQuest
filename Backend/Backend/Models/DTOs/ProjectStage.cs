@@ -14,7 +14,7 @@ namespace Backend.Models.DTOs
         public string? StageTitle { get; set; }
         [DataType(DataType.Date)]
         public DateTime ModifiedAt { get; set; } = DateTime.Now;
-        public int StageStatusId { get; set; }
+        public int StageStatusId { get; set; } = 1;
         [ForeignKey(nameof(StageStatusId))]
         public StageStatus? StageStatus { get; set; }
         public int ProjectId { get; set; }
@@ -33,7 +33,7 @@ namespace Backend.Models.DTOs
             }
             if (stage.StageStatus != null)
             {
-                StageStatus = stage.StageStatus;
+                StageStatusId = stage.StageStatus.Id;
             }
         }
         public void UpdateProjectStage(int stageNumber, string stageTitle, int stageStatusId)

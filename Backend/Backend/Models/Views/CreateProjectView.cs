@@ -6,18 +6,18 @@ namespace Backend.Models.Views
 {
     public class CreateProjectView
     {
-        [Required, MaxLength(255)]
+        [Required, DataType(DataType.Text)]
         public string? Name { get; set; }
-        [Required, MaxLength(500)]
+        [Required, DataType(DataType.Text)]
         public string? Description { get; set; }
         public List<StagesView>? Stages { get; set; }
         public List<SupportView>? Support { get; set; }
     }
     public class StagesView
     {
-        [Required, MaxLength(7)]
+        [Required]
         public int StageNumber { get; set; }
-        [Required, MaxLength(150)]
+        [Required, DataType(DataType.Text)]
         public string? StageTitle { get; set; }
         public StageStatus? StageStatus { get; set; }
         public List<MilestoneView>? Milestones { get; set; }
@@ -25,13 +25,12 @@ namespace Backend.Models.Views
     }
     public class MilestoneView
     {
-        [Required, MaxLength(255)]
+        [Required, DataType(DataType.Text)]
         public string? Description { get; set; }
-        public ProjectStage? ProjectStage { get; set; } = null;
     }
     public class  SupportView
     {
-        [Required, MaxLength(255)]
+        [Required, DataType(DataType.Text)]
         public string? Description { get; set; }
         public SupportType? SupportType { get; set; }
     }

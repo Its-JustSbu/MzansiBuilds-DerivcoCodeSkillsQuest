@@ -25,11 +25,11 @@ namespace Backend.Models.DTOs
         {
             if (project != null)
             {
-                Project = project;
+                ProjectId = project.Id;
             }
             if (user != null)
             {
-                User = user;
+                UserId = user.Id;
             }
             Title = createCommentView.Title;
             Description = createCommentView.Description;

@@ -50,6 +50,16 @@ namespace Backend.Models
                 .WithMany(c => c.Collaborations)
                 .HasForeignKey(c => c.ProjectId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+                collaboration.HasOne(c => c.CollaboratorType)
+                .WithMany()
+                .HasForeignKey(c => c.CollaboratorTypeId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+                collaboration.HasOne(c => c.RequestStatus)
+                .WithMany()
+                .HasForeignKey(c => c.RequestStatusId)
+                .OnDelete(DeleteBehavior.NoAction);
             });
 
             modelBuilder.Entity<Comment>(comment =>
@@ -79,6 +89,11 @@ namespace Backend.Models
                 .WithMany(p => p.Stages)
                 .HasForeignKey(p => p.ProjectId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+                projectStage.HasOne(p => p.StageStatus)
+                .WithMany()
+                .HasForeignKey(p => p.StageStatusId)
+                .OnDelete(DeleteBehavior.NoAction);
             });
 
             modelBuilder.Entity<Support>(support =>
@@ -87,6 +102,11 @@ namespace Backend.Models
                 .WithMany(p => p.Support)
                 .HasForeignKey(s => s.ProjectId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+                support.HasOne(s => s.SupportType)
+                .WithMany()
+                .HasForeignKey(s => s.SupportTypeId)
+                .OnDelete(DeleteBehavior.NoAction);
             });
 
             modelBuilder.Entity<SupportType>().HasData(new List<SupportType>

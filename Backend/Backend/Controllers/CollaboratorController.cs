@@ -97,7 +97,7 @@ namespace Backend.Controllers
             {
                 var collaborators = dataRepository.GetBy<Collaboration>(x => x.ProjectId == ProjectId)
                     .Include(x => x.Project)
-                    .Include(x => x.User)
+                    
                     .Include(x => x.RequestStatus)
                     .Include(x => x.CollaboratorType)
                     .ToList();
@@ -118,7 +118,7 @@ namespace Backend.Controllers
             {
                 var comments = dataRepository.GetBy<Comment>(x => x.ProjectId == ProjectId)
                     .Include(x => x.Project)
-                    .Include(x => x.User)
+                    
                     .ToList();
 
                 return Ok(comments);

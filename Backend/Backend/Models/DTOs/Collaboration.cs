@@ -17,7 +17,7 @@ namespace Backend.Models.DTOs
         public int RequestStatusId { get; set; }
         [ForeignKey(nameof(RequestStatusId))]
         public RequestStatus? RequestStatus { get; set; }
-        public int CollaboratorTypeId { get; set; }
+        public int CollaboratorTypeId { get; set; } = 1;
         [ForeignKey(nameof(CollaboratorTypeId))]
         public CollaboratorType? CollaboratorType { get; set; }
         [DataType(DataType.DateTime)]
@@ -36,13 +36,20 @@ namespace Backend.Models.DTOs
             }
             if (project != null)
             {
-                Project = project;
+                ProjectId = project.Id;
             }
             if (user != null)
             {
-                User = user;
+                UserId = user.Id;
             }
             IsOwner = createCollaboratorView.IsOwner;
+        }
+        public Collaboration(User user)
+        {
+            UserId = user.Id;
+            RequestStatusId = 2;
+            CollaboratorTypeId = 1;
+            IsOwner = true;
         }
         public void UpdatedCollaboration(int requestStatusId, int collaboratorTypeId, bool isOwner)
         {

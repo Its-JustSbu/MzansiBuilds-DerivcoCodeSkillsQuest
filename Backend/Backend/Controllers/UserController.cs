@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using System.Web;
 
 namespace Backend.Controllers
 {
@@ -165,7 +166,8 @@ namespace Backend.Controllers
         {
             try
             {
-                var refreshToken = dataRepository.GetOneBy<RefreshToken>(x => x.Token == Token && x.IsValid == true).Include(x => x.User).FirstOrDefault();
+                Token = HttpUtility.UrlDecode(Token);
+                var refreshToken = dataRepository.GetOneBy<RefreshToken>(x => x.Token == Token.Replace(" ", "+") && x.IsValid == true).FirstOrDefault();
 
                 if (refreshToken == null) return Unauthorized("Invalid refresh token");
 
@@ -178,7 +180,9 @@ namespace Backend.Controllers
 
                     return BadRequest("Refresh token is expired");
                 }
-
+                
+                refreshToken.RevokeToken();
+                dataRepository.Update(refreshToken);
                 var newRefreshToken = new RefreshToken(tokenService.GenerateRefreshToken(), refreshToken.UserId);
                 await dataRepository.AddAsync(newRefreshToken);
                 await dataRepository.SaveChangesAsync();

@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Moq;
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Text;
 
 namespace Backend.tests.ControllerTests
@@ -184,7 +185,7 @@ namespace Backend.tests.ControllerTests
             var token = new RefreshToken(refreshToken, 1) { User = new User() { Id = 1, EmailAddress = "john.doe@example.com" } };
 
             // Act
-            mockDataRepository.Setup(repo => repo.GetOneBy<RefreshToken>(x => x.Token == refreshToken && x.IsValid == true)).Returns(new List<RefreshToken>() { token }.AsQueryable());
+            mockDataRepository.Setup(repo => repo.GetOneBy(It.IsAny<Expression<Func<RefreshToken, bool>>>())).Returns(new List<RefreshToken>() { token }.AsQueryable());
             mockDataRepository.Setup(repo => repo.Update(It.IsAny<RefreshToken>())).Verifiable();
             mockDataRepository.Setup(repo => repo.AddAsync(It.IsAny<RefreshToken>())).Returns(Task.CompletedTask);
             mockDataRepository.Setup(repo => repo.SaveChangesAsync()).Returns(Task.CompletedTask);
@@ -193,7 +194,7 @@ namespace Backend.tests.ControllerTests
 
             // Assert
             mockDataRepository.Verify(repo => repo.AddAsync(It.IsAny<RefreshToken>()), Times.Once);
-            mockDataRepository.Verify(repo => repo.Update(It.IsAny<RefreshToken>()), Times.Never);
+            mockDataRepository.Verify(repo => repo.Update(It.IsAny<RefreshToken>()), Times.Once);
             mockDataRepository.Verify(repo => repo.SaveChangesAsync(), Times.Once);
             var RefreshTokenActionResult = Assert.IsType<OkObjectResult>(result);
             Assert.Equal(200, RefreshTokenActionResult.StatusCode);

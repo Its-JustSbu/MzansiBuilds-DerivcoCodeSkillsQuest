@@ -12,15 +12,26 @@ namespace Backend.Controllers
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class ProjectController(IDataRepository DataRepository) : ControllerBase
+    public class ProjectController(IDataRepository DataRepository, ICurrentUserService CurrentUserService) : ControllerBase
     {
+        private readonly IDataRepository _dataRepository = DataRepository;
+        private readonly ICurrentUserService _currentUserService = CurrentUserService;
         // POST: api/Project
         [HttpPost]
         public async Task<IActionResult> CreateProject(CreateProjectView CreateProject)
         {
             try
             {
-                var newProject = new Project(CreateProject);
+                var user = _currentUserService.GetUserDetails();
+                var currentUser = _dataRepository.GetOneBy<User>(x => x.Id == user.Id || x.EmailAddress == user.EmailAddress).FirstOrDefault();
+
+                if (currentUser == null) return NotFound("Project or User does not exist");
+
+                var newCollaboration = new List<Collaboration>() { new(user)};
+                var newProject = new Project(CreateProject)
+                {
+                    Collaborations = newCollaboration
+                };
 
                 await DataRepository.AddAsync(newProject);
                 await DataRepository.SaveChangesAsync();
@@ -169,7 +180,7 @@ namespace Backend.Controllers
 
                 for (int i = 0; i < sortedStages.Count; i++)
                 {
-                    sortedStages[i].UpdateProjectStage(sortedUpdatedStages[i].StageNumber, sortedUpdatedStages[i].StageTitle!, ProjectId);
+                    sortedStages[i].UpdateProjectStage(sortedUpdatedStages[i].StageNumber, sortedUpdatedStages[i].StageTitle!, sortedUpdatedStages[i].StageStatus!.Id);
                 }
 
                 DataRepository.UpdateRange(sortedStages);
@@ -215,7 +226,7 @@ namespace Backend.Controllers
 
                 if (milestone == null) return NotFound("Milestone not found");
 
-                milestone.UpdateMilestone(updatedMilestone.Description!, updatedMilestone.ProjectStage!);
+                milestone.UpdateMilestone(updatedMilestone.Description!);
                 DataRepository.Update(milestone);
                 await DataRepository.SaveChangesAsync();
 
@@ -264,9 +275,9 @@ namespace Backend.Controllers
 
                 for (int i = 0; i < sortedProjectStages.Count; i++)
                 {
-                    if (i >= sortedStages.Count) break;
+                    if (stagesToDelete.Count == sortedStages.Count) break;
 
-                    if (sortedProjectStages[i].StageNumber == sortedStages[i].StageNumber)
+                    if (sortedProjectStages[i].StageNumber == sortedStages[stagesToDelete.Count].StageNumber)
                     {
                         stagesToDelete.Add(sortedProjectStages[i]);
                     }

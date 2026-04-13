@@ -25,7 +25,7 @@ namespace Backend.Models.DTOs
             Description = support.Description;
             if (support.SupportType != null)
             {
-                SupportType = support.SupportType;
+                SupportTypeId = support.SupportType.Id;
             }
         }
         public void UpdateSupport(string description, int supportTypeId, int projectId)
