@@ -1,0 +1,356 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --green: #22c55e;
+  --green-dim: rgba(34, 197, 94, 0.55);
+  --green-faint: rgba(34, 197, 94, 0.07);
+  --green-border: rgba(34, 197, 94, 0.25);
+  --black: #0a0a0a;
+  --white: #ffffff;
+  --white-muted: rgba(255, 255, 255, 0.45);
+  --font-mono: 'Share Tech Mono', monospace;
+  --font-display: 'Syne', sans-serif;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background: var(--black);
+  color: var(--white);
+  font-family: var(--font-mono);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Grid background */
+.grid-bg {
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--green-faint) 1px, transparent 1px),
+    linear-gradient(90deg, var(--green-faint) 1px, transparent 1px);
+  background-size: 40px 40px;
+  z-index: 0;
+}
+
+/* Scanlines */
+.scanlines {
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 3px,
+    rgba(0, 0, 0, 0.07) 3px,
+    rgba(0, 0, 0, 0.07) 4px
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Corner brackets */
+.corner {
+  position: fixed;
+  width: 32px;
+  height: 32px;
+  border-color: var(--green);
+  border-style: solid;
+  border-width: 0;
+  z-index: 3;
+}
+.corner-tl {
+  top: 24px;
+  left: 24px;
+  border-top-width: 2px;
+  border-left-width: 2px;
+}
+.corner-tr {
+  top: 24px;
+  right: 24px;
+  border-top-width: 2px;
+  border-right-width: 2px;
+}
+.corner-bl {
+  bottom: 24px;
+  left: 24px;
+  border-bottom-width: 2px;
+  border-left-width: 2px;
+}
+.corner-br {
+  bottom: 24px;
+  right: 24px;
+  border-bottom-width: 2px;
+  border-right-width: 2px;
+}
+
+/* Main content */
+.content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 580px;
+  width: 100%;
+  padding: 2rem;
+  animation: fadeUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Status bar */
+.status-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 2rem;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--green);
+  animation: blink 1.2s step-start infinite;
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+.status-text {
+  font-size: 11px;
+  color: var(--green);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+/* 404 heading */
+.error-code {
+  font-family: var(--font-display);
+  font-size: clamp(100px, 20vw, 152px);
+  font-weight: 700;
+  color: var(--white);
+  line-height: 1;
+  letter-spacing: -6px;
+  position: relative;
+  margin-bottom: 0;
+}
+
+.error-code .zero {
+  color: var(--green);
+}
+
+.error-code::after {
+  content: '404';
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  color: var(--green);
+  opacity: 0.1;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Divider */
+.divider {
+  width: 100%;
+  height: 1px;
+  background: var(--green);
+  margin: 1.5rem 0;
+  position: relative;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  width: 5px;
+  height: 5px;
+  background: var(--green);
+}
+
+.divider::before {
+  left: 0;
+}
+.divider::after {
+  right: 0;
+}
+
+/* Label */
+.label {
+  font-size: 10px;
+  color: var(--green);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+}
+
+/* Title */
+.title {
+  font-family: var(--font-display);
+  font-size: clamp(20px, 3.5vw, 26px);
+  font-weight: 700;
+  color: var(--white);
+  letter-spacing: 0.04em;
+  margin-bottom: 1rem;
+}
+
+/* Description */
+.description {
+  font-family: var(--font-display);
+  font-size: 14px;
+  color: var(--white-muted);
+  line-height: 1.7;
+  max-width: 380px;
+  margin-bottom: 2rem;
+  font-weight: 400;
+}
+
+/* Terminal block */
+.terminal {
+  background: var(--green-faint);
+  border: 1px solid var(--green-border);
+  border-radius: 6px;
+  padding: 1rem 1.25rem;
+  width: 100%;
+  text-align: left;
+  margin-bottom: 2rem;
+  font-size: 12px;
+  color: var(--green-dim);
+  line-height: 1.9;
+  letter-spacing: 0.03em;
+}
+
+.terminal .prompt {
+  color: var(--green);
+}
+.terminal .path {
+  color: rgba(255, 255, 255, 0.55);
+}
+.terminal .link {
+  color: var(--green);
+}
+
+/* Cursor blink */
+.cursor {
+  display: inline-block;
+  width: 8px;
+  height: 13px;
+  background: var(--green);
+  vertical-align: middle;
+  animation: blink 1s step-start infinite;
+  margin-left: 2px;
+}
+
+/* Actions */
+.actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.btn {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 11px 28px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition:
+    background 0.15s,
+    border-color 0.15s,
+    color 0.15s,
+    transform 0.1s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn-primary {
+  background: var(--green);
+  color: var(--black);
+  border: 1px solid var(--green);
+  font-weight: 500;
+}
+
+.btn-primary:hover {
+  background: #16a34a;
+  border-color: #16a34a;
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--green);
+  border: 1px solid var(--green-border);
+}
+
+.btn-outline:hover {
+  background: var(--green-faint);
+  border-color: var(--green);
+}
+
+/* Footer */
+.footer {
+  position: fixed;
+  bottom: 24px;
+  font-size: 10px;
+  color: rgba(34, 197, 94, 0.3);
+  letter-spacing: 0.16em;
+  z-index: 2;
+  text-transform: uppercase;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .error-code {
+    letter-spacing: -3px;
+  }
+  .corner {
+    width: 20px;
+    height: 20px;
+  }
+  .actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .btn {
+    text-align: center;
+  }
+}

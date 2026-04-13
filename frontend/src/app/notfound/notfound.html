@@ -1,1 +1,44 @@
-<p>notfound works!</p>
+<body>
+  <div class="grid-bg"></div>
+  <div class="scanlines"></div>
+
+  <div class="corner corner-tl"></div>
+  <div class="corner corner-tr"></div>
+  <div class="corner corner-bl"></div>
+  <div class="corner corner-br"></div>
+
+  <main class="content">
+    <div class="status-bar">
+      <div class="dot"></div>
+      <span class="status-text">System error detected</span>
+    </div>
+
+    <div class="error-code">4<span class="zero">0</span>4</div>
+
+    <div class="divider"></div>
+
+    <p class="label">Page not found</p>
+    <h1 class="title">Lost in the void</h1>
+    <p class="description">
+      The page you're looking for doesn't exist, was moved, or has been permanently deleted from
+      this server.
+    </p>
+
+    <div class="terminal">
+      <div><span class="prompt">$ </span><span class="path">GET /requested-page</span></div>
+      <div><span class="prompt">→ </span>Error 404: Resource not found</div>
+      <div><span class="prompt">→ </span>No matching routes detected</div>
+      <div>
+        <span class="prompt">→ </span>Suggest returning to <a href="/" class="link">/home</a
+        ><span class="cursor"></span>
+      </div>
+    </div>
+
+    <div class="actions">
+      <a href="/" class="btn btn-primary">Go home</a>
+      <a href="javascript:history.back()" class="btn btn-outline">Go back</a>
+    </div>
+  </main>
+
+  <footer class="footer">SYS:ONLINE &nbsp;·&nbsp; BUILD:2026.04 &nbsp;·&nbsp; STATUS:404</footer>
+</body>
