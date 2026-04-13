@@ -1,4 +1,4 @@
-import { lookup } from "./entities";
+import { lookup, projectStage } from "./entities";
 
 export interface ProjectViewDTO {
     name: string;
@@ -16,6 +16,7 @@ export interface StageViewDTO {
 
 export interface MilestoneViewDTO {
     description: string;
+    projectStage?: projectStage;
 }
 
 export interface SupportViewDTO {
