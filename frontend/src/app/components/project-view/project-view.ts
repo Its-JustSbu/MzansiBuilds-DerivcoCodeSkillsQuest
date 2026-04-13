@@ -7,6 +7,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { CreateRequest } from '../create-request/create-request';
 import { CollaboratorsListComponent } from '../collaborators-list/collaborators-list.component';
+import { MatDivider } from "@angular/material/divider";
+import { MatListModule } from '@angular/material/list';
+import { MilestoneList } from "../milestone-list/milestone-list";
+import { MatInputModule } from '@angular/material/input';
 
 export interface projectDialogData {
   isMine: boolean;
@@ -21,7 +25,11 @@ export interface projectDialogData {
     MatButtonModule,
     MatFormFieldModule,
     CollaboratorsListComponent,
-  ],
+    MatDivider,
+    MatListModule,
+    MilestoneList,
+    MatInputModule
+],
   templateUrl: './project-view.html',
   styleUrl: './project-view.scss',
 })

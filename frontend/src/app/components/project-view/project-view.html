@@ -49,6 +49,10 @@
         </table>
       </div>
     }
+    <h2>Milestones</h2>
+    <div class="colaborators">
+      <app-milestone-list />
+    </div>
     @if (data.isMine) {
       <h2>All Collaborators</h2>
       <div class="colaborators">
@@ -60,5 +64,27 @@
         <button matButton="tonal" (click)="requestAccess()">Request Access</button>
       </div>
     }
+  </div>
+  <div>
+    <h3>Comments</h3>
+    <div class="comment-section">
+      <mat-list>
+        <mat-divider></mat-divider>
+        <mat-list-item>
+          <div matListItemTitle>This is the comment</div>
+          <div matListItemLine>Posted by User on The date posted.</div>
+        </mat-list-item>
+      </mat-list>
+      <div class="add-comment">
+        <mat-form-field appearance="outline">
+          <mat-label>Add Comment</mat-label>
+          <input matInput placeholder="Enter comment here" />
+          <mat-icon matSuffix>comment</mat-icon>
+        </mat-form-field>
+        <button matButton="tonal">
+          Add Comment
+        </button>
+      </div>
+    </div>
   </div>
 </div>

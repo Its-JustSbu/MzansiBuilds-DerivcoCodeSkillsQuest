@@ -1,0 +1,41 @@
+<div class="container">
+  <button matIconButton matSuffix (click)="onClose()" class="close-button">
+    <mat-icon>close</mat-icon>
+  </button>
+  <h2>Mange Milestones</h2>
+  @for (stage of stages(); track $index) {
+    @if (stage) {
+      <h3>Milestones for {{ stage.stageTitle }}:</h3>
+      <div>
+        @for (milestone of stage.milestones; track milestone) {
+          <div
+            class="list-item"
+            style="background-color: white; border-radius: 5px; margin-bottom: 15px"
+          >
+            <input type="checkbox" id="item" />
+            <label for="item"> {{ milestone.description }} </label>
+            <button matIconButton matSuffix style="color: red">
+              <mat-icon>remove</mat-icon>
+            </button>
+          </div>
+        }
+      </div>
+    }
+
+    <div class="milestone-form-group">
+      <mat-form-field appearance="outline">
+        <mat-label>Enter New Milestone</mat-label>
+        <textarea matInput placeholder="Milestone Description"></textarea>
+      </mat-form-field>
+      <div class="milestone-actions">
+        <button matIconButton matSuffix style="color: blue">
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+    </div>
+  }
+  <div class="actions-group">
+    <button matButton="outlined">Cancel</button>
+    <button matButton="tonal">Update</button>
+  </div>
+</div>
