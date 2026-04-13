@@ -5,10 +5,10 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { Router, RouterLink } from '@angular/router';
-import { Api } from '../../utils/api';
+import { Api } from '../../utils/services/api';
 import { loginView } from '../../utils/interfaces/loginView';
-import { Storage } from '../../utils/storage';
-import { Messagebox } from '../../utils/messagebox';
+import { Storage } from '../../utils/services/storage';
+import { Messagebox } from '../../utils/services/messagebox';
 import { form, FormField, required } from '@angular/forms/signals';
 
 @Component({
@@ -39,12 +39,12 @@ export class Login {
 
   userForm = form(this.user, (path) => {
     required(path.username, { message: 'Email is required' });
-    required(path.password, { message: 'Password is required'})
+    required(path.password, { message: 'Password is required' });
   });
 
   login() {
     if (!this.userForm().valid()) {
-      this.snackService.openWarning("Please ensure fields are completed!")
+      this.snackService.openWarning('Please ensure fields are completed!');
       return;
     }
 

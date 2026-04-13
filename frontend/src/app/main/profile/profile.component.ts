@@ -8,8 +8,8 @@ import { MatCardModule } from '@angular/material/card';
 import { MatDialog } from '@angular/material/dialog';
 import { UpdatePassword } from '../../components/update-password/update-password';
 import { deleteModalData, DeletePopUp } from '../../components/delete-pop-up/delete-pop-up';
-import { Api } from '../../utils/api';
-import { Messagebox } from '../../utils/messagebox';
+import { Api } from '../../utils/services/api';
+import { Messagebox } from '../../utils/services/messagebox';
 import { user } from '../../utils/interfaces/entities';
 import { form, FormField, required } from '@angular/forms/signals';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -38,8 +38,8 @@ export class ProfileComponent implements OnInit {
           const u: updateUserView = {
             name: currentUser.name,
             surname: currentUser.surname,
-            username: currentUser.username
-          } 
+            username: currentUser.username,
+          };
 
           return u;
         });
@@ -56,7 +56,7 @@ export class ProfileComponent implements OnInit {
   user = signal<updateUserView>({
     name: '',
     surname: '',
-    username: ''
+    username: '',
   });
 
   profileForm = form(this.user, (path) => {

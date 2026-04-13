@@ -6,9 +6,9 @@ import { MatIcon } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { updatePasswordView } from '../../utils/interfaces/updatePasswordView';
 import { form, FormField, required, validate } from '@angular/forms/signals';
-import { Storage } from '../../utils/storage';
-import { Api } from '../../utils/api';
-import { Messagebox } from '../../utils/messagebox';
+import { Storage } from '../../utils/services/storage';
+import { Api } from '../../utils/services/api';
+import { Messagebox } from '../../utils/services/messagebox';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -29,7 +29,7 @@ export class UpdatePassword {
   });
 
   passwordForm = form(this.password, (path) => {
-    required(path.oldPassword, { message: "Old Password is required" });
+    required(path.oldPassword, { message: 'Old Password is required' });
     required(path.newPassword, { message: 'Password is required' });
     required(path.confirmPassword, { message: 'Please confirm password' });
     validate(path.confirmPassword, ({ value, valueOf }) => {
@@ -49,14 +49,14 @@ export class UpdatePassword {
 
   onSubmit() {
     if (!this.passwordForm().valid()) {
-      this.snackService.openWarning("Please ensure fields are completed!")
+      this.snackService.openWarning('Please ensure fields are completed!');
       return;
     }
 
     this.apiService.post('User/Password', this.password()).subscribe({
       next: (res: any) => {
         this.snackService.openSuccess(res.message as string);
-        this.onClose()
+        this.onClose();
       },
       error: (error: any) => {
         this.snackService.openError(error.error.message);

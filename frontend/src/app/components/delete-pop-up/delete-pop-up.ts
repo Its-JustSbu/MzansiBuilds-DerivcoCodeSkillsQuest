@@ -1,8 +1,8 @@
 import { Component, inject } from '@angular/core';
-import { MatAnchor } from "@angular/material/button";
+import { MatAnchor } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Messagebox } from '../../utils/messagebox';
-import { Api } from '../../utils/api';
+import { Messagebox } from '../../utils/services/messagebox';
+import { Api } from '../../utils/services/api';
 
 export interface deleteModalData {
   message: string;

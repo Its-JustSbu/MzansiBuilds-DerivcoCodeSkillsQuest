@@ -5,11 +5,11 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { Router, RouterLink } from '@angular/router';
-import { Api } from '../../utils/api';
-import { Messagebox } from '../../utils/messagebox';
+import { Api } from '../../utils/services/api';
+import { Messagebox } from '../../utils/services/messagebox';
 import { userView } from '../../utils/interfaces/userView';
 import { email, form, required, validate, FormField } from '@angular/forms/signals';
-import { Storage } from '../../utils/storage';
+import { Storage } from '../../utils/services/storage';
 
 @Component({
   selector: 'app-register',
@@ -20,8 +20,8 @@ import { Storage } from '../../utils/storage';
     MatIconModule,
     MatFormFieldModule,
     RouterLink,
-    FormField
-],
+    FormField,
+  ],
   templateUrl: './register.html',
   styleUrl: './register.scss',
 })
@@ -71,7 +71,7 @@ export class Register {
 
     this.apiService.post('user', this.user()).subscribe({
       next: () => {
-        this.snackService.openSuccess("User registered Successfully!");
+        this.snackService.openSuccess('User registered Successfully!');
         this.router.navigate(['/login']);
       },
       error: (error: any) => {
