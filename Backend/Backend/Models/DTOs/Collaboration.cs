@@ -11,14 +11,14 @@ namespace Backend.Models.DTOs
         [ForeignKey(nameof(ProjectId))]
         public int ProjectId { get; set; }
         public Project? Project { get; set; }
-        [ForeignKey(nameof(UserId))]
         public int UserId { get; set; }
+        [ForeignKey(nameof(UserId))]
         public User? User { get; set; }
-        [ForeignKey(nameof(RequestStatusId))]
         public int RequestStatusId { get; set; }
+        [ForeignKey(nameof(RequestStatusId))]
         public RequestStatus? RequestStatus { get; set; }
-        [ForeignKey(nameof(CollaboratorTypeId))]
         public int CollaboratorTypeId { get; set; }
+        [ForeignKey(nameof(CollaboratorTypeId))]
         public CollaboratorType? CollaboratorType { get; set; }
         [DataType(DataType.DateTime)]
         public DateTime JoinedAt { get; set; } = DateTime.Now;

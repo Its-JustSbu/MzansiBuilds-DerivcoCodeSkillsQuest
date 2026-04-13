@@ -14,11 +14,11 @@ namespace Backend.Models.DTOs
         public string? StageTitle { get; set; }
         [DataType(DataType.Date)]
         public DateTime ModifiedAt { get; set; } = DateTime.Now;
-        [ForeignKey(nameof(StageStatusId))]
         public int StageStatusId { get; set; }
+        [ForeignKey(nameof(StageStatusId))]
         public StageStatus? StageStatus { get; set; }
-        [ForeignKey(nameof(ProjectId))]
         public int ProjectId { get; set; }
+        [ForeignKey(nameof(ProjectId))]
         public Project? Project { get; set; }
         public ICollection<Milestone>? Milestones { get; set; } = [];
         public ProjectStage() { }

@@ -29,6 +29,9 @@ namespace Backend.Models.DTOs
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         [DataType(DataType.DateTime)]
         public DateTime ModifiedAt { get; set; } = DateTime.Now;
+        public ICollection<Collaboration>? Collaborations { get; set; }
+        public ICollection<Comment>? Comments { get; set; }
+        public ICollection<RefreshToken>? RefreshTokens { get; set; }
         public User() { }
         public User(UserView user)
         {
