@@ -1,11 +1,14 @@
 import { Component, inject } from '@angular/core';
 import { MatAnchor } from "@angular/material/button";
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { Messagebox } from '../../utils/messagebox';
+import { Api } from '../../utils/api';
 
 export interface deleteModalData {
   message: string;
   subMessage: string;
   apiUri: string;
+  data?: any;
 }
 
 @Component({
@@ -15,5 +18,23 @@ export interface deleteModalData {
   styleUrl: './delete-pop-up.scss',
 })
 export class DeletePopUp {
+  snackService = inject(Messagebox);
+  apiService = inject(Api);
   data: deleteModalData = inject(MAT_DIALOG_DATA);
+  dialogRef = inject(MatDialogRef<DeletePopUp>);
+
+  onSubmit() {
+    this.apiService.delete(this.data.apiUri, this.data.data).subscribe({
+      next: (res: any) => {
+        this.snackService.openSuccess(res.message as string);
+        this.onClose();
+      },
+      error: (error: any) => {
+        this.snackService.openError(error.error.message);
+      },
+    });
+  }
+  onClose() {
+    this.dialogRef.close();
+  }
 }

@@ -190,3 +190,30 @@ input.mat-mdc-input-element {
   box-shadow: -9px 9px 2px 0px var(--mat-sys-primary-container) !important;
 }
 
+.success-bar {
+  --mdc-snackbar-container-color: var(
+    --mat-sys-primary-container
+  ) !important; /* Background color */
+  --mdc-snackbar-supporting-text-color: var(--mat-sys-shadow) !important; /* Text color */
+  --mat-mdc-snack-bar-button-color: var(--mat-sys-shadow) !important; /* Action button color */
+}
+.error-bar {
+  --mdc-snackbar-container-color: var(--mat-sys-error-container) !important; /* Background color */
+  --mdc-snackbar-supporting-text-color: var(
+    --mat-sys-tertiary-container
+  ) !important; /* Text color */
+  --mat-mdc-snack-bar-button-color: var(
+    --mat-sys-tertiary-container
+  ) !important; /* Action button color */
+}
+.warn-bar {
+  --mdc-snackbar-container-color: var(
+    --mat-sys-secondary-container
+  ) !important; /* Background color */
+  --mdc-snackbar-supporting-text-color: var(
+    --mat-sys-primary-container
+  ) !important; /* Text color */
+  --mat-mdc-snack-bar-button-color: var(
+    --mat-sys-primary-container
+  ) !important; /* Action button color */
+}

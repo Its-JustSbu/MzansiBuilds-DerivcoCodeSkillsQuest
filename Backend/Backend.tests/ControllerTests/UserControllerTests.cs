@@ -105,19 +105,19 @@ namespace Backend.tests.ControllerTests
             var LogoutActionResult = Assert.IsType<OkObjectResult>(result);
             Assert.Equal(200, LogoutActionResult.StatusCode);
         }
-        [Theory]
-        [InlineData(1)]
-        public async Task GetUserById(int id)
+        [Fact]
+        public async Task GetCurrentUser_ReturnsOkResult()
         {
             // Arrange
-            var users = new List<User>() { new() { Id = 1 } };
+            var users = new List<User>() { new() { Id = 1, EmailAddress = "johndoe@example.com" } };
 
             // Act
-            mockDataRepository.Setup(repo => repo.GetOneBy<User>(x => x.Id == id)).Returns(users.AsQueryable());
+            mockCurrentUserService.Setup(u => u.GetUserDetails()).Returns(users.FirstOrDefault()!);
 
-            var result = await mockUserController.GetUserById(id);
+            var result = await mockUserController.GetCurrentUser();
 
             // Assert
+            mockCurrentUserService.Verify(service => service.GetUserDetails(), Times.Once);
             var GetActionResult = Assert.IsType<OkObjectResult>(result);
             Assert.Equal(200, GetActionResult.StatusCode);
         }

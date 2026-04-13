@@ -64,7 +64,7 @@ namespace Backend.Controllers
 
         // POST: api/User/logout
         [Authorize]
-        [HttpPost("Logout")]
+        [HttpGet("Logout")]
         public async Task<IActionResult> Logout()
         {
             try
@@ -89,12 +89,12 @@ namespace Backend.Controllers
 
         // GET: api/User/{id}
         [Authorize]
-        [HttpGet("GetUserById/{id}")]
-        public async Task<IActionResult> GetUserById(int id)
+        [HttpGet("GetCurrentUser")]
+        public async Task<IActionResult> GetCurrentUser()
         {
             try
             {
-                var user = dataRepository.GetOneBy<User>(x => x.Id == id).FirstOrDefault();
+                var user = currentUserService.GetUserDetails();
 
                 if (user == null) return NotFound("User not found");
 
@@ -161,7 +161,7 @@ namespace Backend.Controllers
         }
 
         // PUT: api/User/RefreshToken/{Token}
-        [HttpPut("RefreshToken/{Token}")]
+        [HttpGet("RefreshToken/{Token}")]
         public async Task<IActionResult> RefreshToken(string Token)
         {
             try

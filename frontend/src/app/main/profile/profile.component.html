@@ -1,24 +1,24 @@
 <div class="container">
-  <form [formGroup]="profileForm" novalidate (ngSubmit)="onSubmit()">
+  <form (ngSubmit)="onSubmit()">
     <mat-card class="shipping-card">
       <mat-card-header>
         <mat-card-title>Update Profile Information</mat-card-title>
       </mat-card-header>
-      <mat-card-content style="padding: 20px;">
+      <mat-card-content style="padding: 20px">
         <div class="row">
           <div class="col">
             <mat-form-field class="full-width" appearance="outline">
-              <input matInput placeholder="First name" formControlName="firstName" />
-              @if (profileForm.controls['firstName'].hasError('required')) {
-                <mat-error>First name is <strong>required</strong></mat-error>
+              <input matInput placeholder="First name" [formField]="profileForm.name" />
+              @for (error of profileForm.name().errors(); track error) {
+                <mat-error>{{ error.message }}</mat-error>
               }
             </mat-form-field>
           </div>
           <div class="col">
             <mat-form-field class="full-width" appearance="outline">
-              <input matInput placeholder="Last name" formControlName="lastName" />
-              @if (profileForm.controls['lastName'].hasError('required')) {
-                <mat-error>Last name is <strong>required</strong></mat-error>
+              <input matInput placeholder="Last name" [formField]="profileForm.surname" />
+              @for (error of profileForm.surname().errors(); track error) {
+                <mat-error>{{ error.message }}</mat-error>
               }
             </mat-form-field>
           </div>
@@ -26,18 +26,21 @@
         <div class="row">
           <div class="col">
             <mat-form-field class="full-width" appearance="outline">
-              <input
-                matInput
-                placeholder="Username"
-                formControlName="username"
-              />
+              <input matInput placeholder="Username" [formField]="profileForm.username" />
+              @for (error of profileForm.username().errors(); track error) {
+                <mat-error>{{ error.message }}</mat-error>
+              }
             </mat-form-field>
           </div>
         </div>
       </mat-card-content>
       <mat-card-actions>
-            <button matButton="filled" type="button" (click)="openUpdatePassword()">Update Password</button>
-            <button matButton="filled" type="button" (click)="openDeactivateAccount()">Deactivate Account</button>
+        <button matButton="filled" type="button" (click)="openUpdatePassword()">
+          Update Password
+        </button>
+        <button matButton="filled" type="button" (click)="openDeactivateAccount()">
+          Deactivate Account
+        </button>
         <button matButton="elevated" color="primary" type="submit">Update</button>
       </mat-card-actions>
     </mat-card>

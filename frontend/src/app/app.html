@@ -1,1 +1,8 @@
+@if (loaderService.isLoading()) {
+  <div class="loader-overlay">
+    <mat-progress-spinner class="example-margin" [mode]="'indeterminate'"> </mat-progress-spinner>
+    <p>Loading...</p>
+  </div>
+}
+
 <router-outlet></router-outlet>

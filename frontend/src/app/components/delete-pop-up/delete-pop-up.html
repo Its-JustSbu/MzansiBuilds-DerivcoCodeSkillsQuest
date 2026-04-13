@@ -2,7 +2,7 @@
     <h2>{{data.message}}</h2>
     <small>{{data.subMessage}}</small>
     <div class="buttons-container">
-        <button matButton="outlined">cancel</button>
-        <button matButton="tonal">delete</button>
+        <button matButton="outlined" (click)="onClose()">cancel</button>
+        <button matButton="tonal" (click)="onSubmit()">delete</button>
     </div>
 </div>

@@ -6,14 +6,20 @@
 
       <mat-form-field color="accent" appearance="outline">
         <mat-label>Username or Email Address</mat-label>
-        <input matInput placeholder="John@Example.com" />
+        <input matInput placeholder="John@Example.com" [formField]="userForm.username" />
         <mat-icon matSuffix>account_box</mat-icon>
+        @for (error of userForm.username().errors(); track error) {
+          <mat-error>{{ error.message }}</mat-error>
+        }
       </mat-form-field>
 
       <mat-form-field appearance="outline">
         <mat-label>Password</mat-label>
-        <input matInput placeholder="Enter password" />
+        <input matInput type="password" placeholder="Enter password" [formField]="userForm.password" />
         <mat-icon matSuffix>lock</mat-icon>
+        @for (error of userForm.password().errors(); track error) {
+          <mat-error>{{ error.message }}</mat-error>
+        }
       </mat-form-field>
 
       <button matFab extended type="submit">
@@ -21,12 +27,6 @@
         <mat-icon matSuffix>keyboard_tab</mat-icon>
       </button>
     </form>
-    <!-- <p class="forgot-text">
-      <small
-        >Forgot password?
-        <a style="color: white" (click)="forgotPassword()">Click Here</a></small
-      >
-    </p> -->
     <p class="register-text">
       <small
         >Don't have an account?
