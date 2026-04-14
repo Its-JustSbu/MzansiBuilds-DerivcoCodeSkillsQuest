@@ -9,7 +9,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { UpdatePassword } from '../../components/update-password/update-password';
 import { deleteModalData, DeletePopUp } from '../../components/delete-pop-up/delete-pop-up';
 import { Api } from '../../utils/services/api';
-import { Messagebox } from '../../utils/messagebox';
+import { Messagebox } from '../../utils/services/messagebox';
 import { user } from '../../utils/interfaces/entities';
 import { form, FormField, required } from '@angular/forms/signals';
 import { MatFormFieldModule } from '@angular/material/form-field';

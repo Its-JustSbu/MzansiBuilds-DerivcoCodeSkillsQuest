@@ -13,7 +13,7 @@ import { ProjectCard } from '../../components/project-card/project-card';
 import { MatDialog } from '@angular/material/dialog';
 import { AddProjectComponent } from '../../components/add-project/add-project.component';
 import { collaboration, project } from '../../utils/interfaces/entities';
-import { Messagebox } from '../../utils/messagebox';
+import { Messagebox } from '../../utils/services/messagebox';
 import { Api } from '../../utils/services/api';
 
 @Component({
@@ -48,12 +48,12 @@ export class MyProjectsComponent implements OnInit {
       },
     });
   }
-  openAdd(){
+  openAdd() {
     this.dialog.open(AddProjectComponent, {
-      maxWidth: "95vw",
-      width: "100%",
-      maxHeight: "660px",
-      height: "100%",
-    })
+      maxWidth: '95vw',
+      width: '100%',
+      maxHeight: '660px',
+      height: '100%',
+    });
   }
 }

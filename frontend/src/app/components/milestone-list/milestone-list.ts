@@ -17,6 +17,7 @@ export class MilestoneList implements OnInit {
       if (stage)
         this.milestones.update(arr => [...arr, ...stage.milestones as milestone[] ])
     });
+    console.log(this.stages);
   }
 
   milestones = signal<milestone[]>([]);

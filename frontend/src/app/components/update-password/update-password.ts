@@ -6,9 +6,9 @@ import { MatIcon } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { updatePasswordView } from '../../utils/interfaces/updatePasswordView';
 import { form, FormField, required, validate } from '@angular/forms/signals';
-import { Storage } from '../../utils/storage';
+import { Storage } from '../../utils/services/storage';
 import { Api } from '../../utils/services/api';
-import { Messagebox } from '../../utils/messagebox';
+import { Messagebox } from '../../utils/services/messagebox';
 import { FormsModule } from '@angular/forms';
 
 @Component({

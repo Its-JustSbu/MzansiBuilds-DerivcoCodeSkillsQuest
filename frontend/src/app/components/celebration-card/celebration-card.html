@@ -24,7 +24,7 @@
           <div class="avatar-stack">
             @for (users of card.collaborations; track $index) {
               @if (users.user) {
-                <span class="avatar">{{ users.user.name[0] }}{{ users.user.surname[1] }}</span>
+                <span class="avatar">{{ users.user.name[0] }}{{ users.user.surname[0] }}</span>
               }
             }
             @if (card.collaborations.length - 3 > 0) {

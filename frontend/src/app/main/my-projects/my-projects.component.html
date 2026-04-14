@@ -10,7 +10,7 @@
     @for (card of cards(); track card) {
       <mat-grid-tile>
         @if (card.project) {
-          <app-project-card [isGeneralCard]="false" [card]="card.project" />
+          <app-project-card [isGeneralCard]="false" [card]="card.project" [collaborations]="cards()" />
         }
       </mat-grid-tile>
     }

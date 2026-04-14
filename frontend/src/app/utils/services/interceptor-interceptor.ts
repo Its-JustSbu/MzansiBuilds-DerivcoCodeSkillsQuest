@@ -1,9 +1,9 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 import { Auth } from './auth';
 import { inject } from '@angular/core';
-import { Loader } from '../loader';
+import { Loader } from './loader';
 import { finalize } from 'rxjs';
-import { Storage } from '../storage';
+import { Storage } from './storage';
 import { Token } from '@angular/compiler';
 
 export const interceptorInterceptor: HttpInterceptorFn = (req, next) => {
@@ -15,9 +15,9 @@ export const interceptorInterceptor: HttpInterceptorFn = (req, next) => {
   auth.token.update(() => storageService.getItem('token') as string);
 
   if (auth.token()) {
-    if (auth.isTokenExpired()) {
-      auth.refreshToken();
-    }
+    // if (auth.isTokenExpired()) {
+    //   auth.refreshToken();
+    // }
     // Clone the request to add the authentication header.
     const newReq = req.clone({
       setHeaders: {

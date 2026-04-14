@@ -4,8 +4,8 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { CelebrationCard } from '../../components/celebration-card/celebration-card';
 import { project } from '../../utils/interfaces/entities';
 import { Api } from '../../utils/services/api';
-import { Messagebox } from '../../utils/messagebox';
-import { Storage } from '../../utils/storage';
+import { Messagebox } from '../../utils/services/messagebox';
+import { Storage } from '../../utils/services/storage';
 
 @Component({
   selector: 'app-celebration-wall',

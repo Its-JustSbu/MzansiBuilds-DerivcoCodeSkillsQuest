@@ -117,8 +117,8 @@ namespace Backend.Controllers
                 throw;
             }
         }
-        // GET: api/Project/{Id}
-        [HttpGet("{Id}")]
+        // GET: api/Project/ById/{Id}
+        [HttpGet("ById/{Id}")]
         public async Task<IActionResult> GetProjectById(int Id)
         {
             try
@@ -203,7 +203,7 @@ namespace Backend.Controllers
                     })
                     .ToList();
 
-                var pendingProjects = projects.Where(p => p.Stages!.All(s => s.StageStatusId != 3))
+                var pendingProjects = projects.Where(p => p.Stages!.All(s => s.StageStatusId < 3))
                     .Skip((pageNumber - 1) * maxPageSize)
                     .Take(maxPageSize)
                     .ToList();
@@ -247,6 +247,7 @@ namespace Backend.Controllers
                             {
                                 Id = c.User!.Id,
                                 Name = c.User.Name,
+                                Surname = c.User.Surname,
                                 EmailAddress = c.User.EmailAddress,
                                 Username = c.User.Username
                             }
@@ -272,7 +273,7 @@ namespace Backend.Controllers
         }
         // PUT: api/Project/{id}
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateProject(int id, CreateProjectView updatedProject)
+        public async Task<IActionResult> UpdateProject(int id, Project updatedProject)
         {
             try
             {
@@ -280,7 +281,7 @@ namespace Backend.Controllers
 
                 if (project == null) return NotFound("Project not found");
 
-                project.UpdateProject(updatedProject.Name!, updatedProject.Description!);
+                project.UpdateProject(updatedProject.Name!, updatedProject.Description!, [.. updatedProject.Stages!], [.. updatedProject.Support!]);
                 DataRepository.Update(project);
                 await DataRepository.SaveChangesAsync();
 
@@ -292,13 +293,15 @@ namespace Backend.Controllers
                 throw;
             }
         }
-        // PUT: api/Project/{ProjectId}/{StageId}/stage
+        // PUT: api/Project/{ProjectId}/stage
         [HttpPut("{ProjectId}/stage")]
-        public async Task<IActionResult> UpdateProjectStage(int ProjectId, List<StagesView> updatedStages)
+        public async Task<IActionResult> UpdateProjectStage(int ProjectId, List<ProjectStage> updatedStages)
         {
             try
             {
-                var projectStages = await DataRepository.GetByAsync<ProjectStage>(s => s.ProjectId == ProjectId);
+                var projectStages = DataRepository.GetBy<ProjectStage>(s => s.ProjectId == ProjectId)
+                    .Include(x => x.Milestones)
+                    .ToList();
 
                 if (projectStages.Count == 0) return NotFound("Project stage not found");
 
@@ -307,7 +310,7 @@ namespace Backend.Controllers
 
                 for (int i = 0; i < sortedStages.Count; i++)
                 {
-                    sortedStages[i].UpdateProjectStage(sortedUpdatedStages[i].StageNumber, sortedUpdatedStages[i].StageTitle!, sortedUpdatedStages[i].StageStatus!.Id);
+                    sortedStages[i].UpdateProjectStage(sortedUpdatedStages[i].StageNumber, sortedUpdatedStages[i].StageTitle!, sortedUpdatedStages[i].StageStatus!.Id, sortedUpdatedStages[i].Milestones!.ToList());
                 }
 
                 DataRepository.UpdateRange(sortedStages);
@@ -323,7 +326,7 @@ namespace Backend.Controllers
         }
         // PUT: api/Project/{ProjectId}/{SupportId}/support
         [HttpPut("{ProjectId}/{SupportId}/support")]
-        public async Task<IActionResult> UpdateSupportRequest(int ProjectId, int SupportId, SupportView updatedSupport)
+        public async Task<IActionResult> UpdateSupportRequest(int ProjectId, int SupportId, Support updatedSupport)
         {
             try
             {
@@ -336,28 +339,6 @@ namespace Backend.Controllers
                 await DataRepository.SaveChangesAsync();
 
                 return Ok(new { message = "Support request updated successfully" });
-            }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error");
-                throw;
-            }
-        }
-        // PUT: api/Project/{MilestoneId}/milestone
-        [HttpPut("{MilestoneId}/milestone")]
-        public async Task<IActionResult> UpdateMilestone(int MilestoneId, MilestoneView updatedMilestone)
-        {
-            try
-            {
-                var milestone = DataRepository.GetOneBy<Milestone>(m => m.Id == MilestoneId).FirstOrDefault();
-
-                if (milestone == null) return NotFound("Milestone not found");
-
-                milestone.UpdateMilestone(updatedMilestone.Description!);
-                DataRepository.Update(milestone);
-                await DataRepository.SaveChangesAsync();
-
-                return Ok(new { message = "Milestone updated successfully" });
             }
             catch (Exception)
             {

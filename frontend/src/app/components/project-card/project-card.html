@@ -22,7 +22,7 @@
   </mat-card-content>
   <mat-card-footer>
     <div class="card-footer">
-      @if (card.collaborations && card.collaborations.length > 0) {
+      @if ((card.collaborations && card.collaborations.length > 0) || (collaborations && collaborations.length > 0)) {
         <div class="status-indicator">
           <div class="pulse-wrap">
             <div class="pulse-ring"></div>

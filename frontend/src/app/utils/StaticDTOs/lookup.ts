@@ -30,10 +30,10 @@ export const stageStatus: lookup[] = [
     },
     {
         id: 2,
-        name: "Financial"
+        name: "In Progress"
     },
     {
         id: 3,
-        name: "Financial"
+        name: "Completed"
     },
 ];

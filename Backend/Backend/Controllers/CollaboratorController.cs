@@ -33,6 +33,7 @@ namespace Backend.Controllers
                 {
                     createCollaboratorView.IsOwner = true;
                     createCollaboratorView.CollaboratorType = new() { Id = 1, Name = "Owner" };
+                    createCollaboratorView.RequestStatus = new() { Id = 1, Name = "Approved" };
                 }
 
                 var collaboration = new Collaboration(createCollaboratorView, project, currentUser);
@@ -86,7 +87,6 @@ namespace Backend.Controllers
 
                 var collaborators = dataRepository.GetBy<Collaboration>(x => x.UserId == currentUser.Id)
                     .Include(x => x.Project)
-                    .ThenInclude(x => x.Collaborations)
                     .Include(x => x.User)
                     .Include(x => x.RequestStatus)
                     .Include(x => x.CollaboratorType)

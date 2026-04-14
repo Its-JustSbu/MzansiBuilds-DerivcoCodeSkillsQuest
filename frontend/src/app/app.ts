@@ -1,7 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { RouterOutlet } from '@angular/router';
-import { Loader } from './utils/loader';
+import { Loader } from './utils/services/loader';
 
 @Component({
   selector: 'app-root',

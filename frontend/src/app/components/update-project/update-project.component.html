@@ -1,17 +1,23 @@
 <div class="main-container">
-  <h2 style="width: 100%; text-align: center">Update Project</h2>
-  <form class="grid-container">
+  <h2 style="width: 100%; text-align: center">Create a New Project</h2>
+  <form class="grid-container" (ngSubmit)="onSubmit()">
     <div class="project-form">
       <h2>Project Details</h2>
       <div class="project-form-group">
         <mat-form-field appearance="outline">
           <mat-label>Enter Project Name</mat-label>
-          <input matInput placeholder="Project Name" />
+          <input matInput placeholder="Project Name" [formField]="projectForm.name" />
           <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+          @for (error of projectForm.name().errors(); track error) {
+            <mat-error>{{ error.message }}</mat-error>
+          }
         </mat-form-field>
         <mat-form-field appearance="outline">
           <mat-label>Enter Project Description</mat-label>
-          <textarea matInput placeholder="Project Description"></textarea>
+          <input matInput placeholder="Project Description" [formField]="projectForm.description" />
+          @for (error of projectForm.description().errors(); track error) {
+            <mat-error>{{ error.message }}</mat-error>
+          }
         </mat-form-field>
       </div>
       <button matIconButton matSuffix (click)="onClose()">
@@ -20,25 +26,45 @@
     </div>
     <div class="container">
       <h2>Project Steps</h2>
-      @if (project.stages) {
+      @if (project().stages) {
         <div
           cdkDropList
-          #todoList="cdkDropList"
-          [cdkDropListData]="project.stages"
+          #stages="cdkDropList"
+          [cdkDropListData]="project().stages"
           class="list"
           (cdkDropListDropped)="drop($event)"
           style="margin-bottom: 15px"
         >
-          @for (stage of project.stages; track stage) {
+          @for (stage of project().stages; track $index) {
             <div class="list-item" cdkDrag>
               <span>
                 <mat-icon>drag_indicator</mat-icon>
               </span>
-              <input type="checkbox" id="item-check" />
-              <label for="item-check">
-                {{ stage.stageNumber }}. {{ stage.stageTitle }} ({{ stage.stageStatus.name }})
-              </label>
-              <button matIconButton matSuffix (click)="onClose()" style="color: red">
+              <mat-form-field appearance="outline" style="width: 64px">
+                <mat-label>Stage Number</mat-label>
+                <input matInput [value]="stage.stageNumber" [disabled]="true" />
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Enter Stage Title</mat-label>
+                <input
+                  matInput
+                  placeholder="Stage Title"
+                  [value]="stage.stageTitle"
+                  (input)="updateItem($index, $any($event.target).value)"
+                />
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Select Support Type</mat-label>
+                <mat-select
+                  [(value)]="stage.stageStatus"
+                  (selectionChange)="updateSelection(stage, $event.value)"
+                >
+                  <mat-option *ngFor="let status of stageStatuses" [value]="status">
+                    {{ status.name }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <button matIconButton matSuffix (click)="removeStage(stage)" style="color: red">
                 <mat-icon>remove</mat-icon>
               </button>
             </div>
@@ -46,37 +72,39 @@
         </div>
       }
 
-      <div class="support-form-group">
-        <mat-form-field appearance="outline">
-          <mat-label>Enter Stage Number</mat-label>
-          <input matInput placeholder="Stage Number" type="number" />
-          <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
-        </mat-form-field>
+      <form #form class="support-form-group" (submit)="$event.preventDefault(); addStage(form)">
         <mat-form-field appearance="outline">
           <mat-label>Stage Title</mat-label>
-          <input matInput placeholder="Stage Title" />
+          <input matInput placeholder="Stage Title" name="title" />
           <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
         </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Select Stage Status</mat-label>
+          <mat-select [(value)]="selectedStatus">
+            <mat-option *ngFor="let status of stageStatuses" [value]="status">
+              {{ status.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
         <div class="support-actions">
-          <button matIconButton matSuffix (click)="onClose()" style="color: blue">
+          <button matIconButton matSuffix type="submit" style="color: blue">
             <mat-icon>add</mat-icon>
           </button>
         </div>
-      </div>
+      </form>
     </div>
     <div>
       <h2>Request Project Support</h2>
-      @if (project.support) {
+      @if (project().support) {
         <h3>Requests:</h3>
         <div>
-          @for (support of project.support; track support) {
+          @for (support of project().support; track support) {
             <div
               class="list-item"
               style="background-color: white; border-radius: 5px; margin-bottom: 15px"
             >
-              <input type="checkbox" id="item" />
-              <label for="item"> Request for {{ support.supportType.name }} </label>
-              <button matIconButton matSuffix (click)="onClose()" style="color: red">
+              <label for="item"> Request for {{ support.supportType?.name }} </label>
+              <button matIconButton matSuffix (click)="removeSupport(support)" style="color: red">
                 <mat-icon>remove</mat-icon>
               </button>
             </div>
@@ -84,28 +112,29 @@
         </div>
       }
 
-      <div class="support-form-group">
+      <form #form class="support-form-group" (submit)="$event.preventDefault(); addSupport(form)">
         <mat-form-field appearance="outline">
           <mat-label>Select Support Type</mat-label>
-          <mat-select>
-            <mat-option value="one">First option</mat-option>
-            <mat-option value="two">Second option</mat-option>
+          <mat-select [(value)]="selectedSupport">
+            <mat-option *ngFor="let support of supportTypes" [value]="support">
+              {{ support.name }}
+            </mat-option>
           </mat-select>
         </mat-form-field>
         <mat-form-field appearance="outline">
           <mat-label>Enter Support Description</mat-label>
-          <textarea matInput placeholder="Support Description"></textarea>
+          <input matInput placeholder="Support Description" name="description" />
         </mat-form-field>
         <div class="support-actions">
-          <button matIconButton matSuffix (click)="onClose()" style="color: blue">
+          <button matIconButton matSuffix type="submit" style="color: blue">
             <mat-icon>add</mat-icon>
           </button>
         </div>
-      </div>
+      </form>
     </div>
     <div class="actions-group">
-      <button matButton="outlined">Cancel</button>
-      <button matButton="tonal">Update</button>
+      <button matButton="outlined" type="button" (click)="onClose()">Cancel</button>
+      <button matButton="filled" type="submit">Save Changes</button>
     </div>
   </form>
 </div>

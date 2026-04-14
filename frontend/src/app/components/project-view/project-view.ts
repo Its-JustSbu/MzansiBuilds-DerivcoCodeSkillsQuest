@@ -16,10 +16,16 @@ import { MatDivider } from '@angular/material/divider';
 import { MatListModule } from '@angular/material/list';
 import { MilestoneList } from '../milestone-list/milestone-list';
 import { MatInputModule } from '@angular/material/input';
-import { comment, lookup, project, projectStage } from '../../utils/interfaces/entities';
+import {
+  collaboration,
+  comment,
+  lookup,
+  project,
+  projectStage,
+} from '../../utils/interfaces/entities';
 import { DatePipe } from '@angular/common';
 import { createCommentView } from '../../utils/interfaces/createCommentView';
-import { Messagebox } from '../../utils/messagebox';
+import { Messagebox } from '../../utils/services/messagebox';
 import { Api } from '../../utils/services/api';
 import { form, required, FormField } from '@angular/forms/signals';
 import { FormsModule } from '@angular/forms';
@@ -27,6 +33,7 @@ import { FormsModule } from '@angular/forms';
 export interface projectDialogData {
   isMine: boolean;
   project: project;
+  collabs: collaboration[];
 }
 
 @Component({

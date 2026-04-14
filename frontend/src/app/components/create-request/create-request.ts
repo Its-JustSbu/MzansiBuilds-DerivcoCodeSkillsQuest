@@ -3,9 +3,9 @@ import { FormsModule } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { ProjectViewDTO } from '../../utils/interfaces/ProjectView';
-import { MatAnchor, MatButtonModule } from "@angular/material/button";
+import { MatAnchor, MatButtonModule } from '@angular/material/button';
 import { collaboration, project } from '../../utils/interfaces/entities';
-import { Messagebox } from '../../utils/messagebox';
+import { Messagebox } from '../../utils/services/messagebox';
 import { Api } from '../../utils/services/api';
 
 @Component({
@@ -25,18 +25,18 @@ export class CreateRequest {
   request = signal<collaboration>({
     requestStatus: {
       id: 1,
-      name: "Pending"
+      name: 'Pending',
     },
     collaboratorType: {
       id: 2,
-      name: "Contributor"
+      name: 'Contributor',
     },
-    isOwner: false
-  })
+    isOwner: false,
+  });
   sendRequest() {
     this.apiService.post(`Collaborator/${this.project.id}`, this.request()).subscribe({
-      next: (res: any) => {
-        this.snackService.openSuccess("Request Successfully Sent!");
+      next: () => {
+        this.snackService.openSuccess('Request Successfully Sent!');
         this.onClose();
       },
       error: (error: any) => {

@@ -5,7 +5,7 @@ import { ProjectViewDTO } from '../../utils/interfaces/ProjectView';
 import { ProjectCard } from '../../components/project-card/project-card';
 import { stageStatus, supportType } from '../../utils/StaticDTOs/lookup';
 import { project } from '../../utils/interfaces/entities';
-import { Messagebox } from '../../utils/messagebox';
+import { Messagebox } from '../../utils/services/messagebox';
 import { Api } from '../../utils/services/api';
 
 @Component({

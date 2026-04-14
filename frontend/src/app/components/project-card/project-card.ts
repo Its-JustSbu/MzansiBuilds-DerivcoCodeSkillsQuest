@@ -10,7 +10,7 @@ import { CreateRequest } from '../create-request/create-request';
 import { UpdateProjectComponent } from '../update-project/update-project.component';
 import { deleteModalData, DeletePopUp } from '../delete-pop-up/delete-pop-up';
 import { ManageMilestones } from '../manage-milestones/manage-milestones';
-import { project } from '../../utils/interfaces/entities';
+import { collaboration, project, projectStage } from '../../utils/interfaces/entities';
 import { DatePipe } from '@angular/common';
 
 @Component({
@@ -22,11 +22,12 @@ import { DatePipe } from '@angular/common';
 export class ProjectCard {
   @Input({ required: true }) isGeneralCard!: boolean;
   @Input({ required: true }) card!: project;
+  @Input() collaborations!: collaboration[];
   dialog = inject(MatDialog);
 
   openDetails() {
     this.dialog.open(ProjectView, {
-      data: { project: this.card, isMine: !this.isGeneralCard } as projectDialogData,
+      data: { project: this.card, isMine: !this.isGeneralCard, collabs: this.collaborations } as projectDialogData,
       maxWidth: '95vw',
       width: '100%',
       maxHeight: '660px',
@@ -68,6 +69,7 @@ export class ProjectCard {
 
   openMilestones() {
     this.dialog.open(ManageMilestones, {
+      data: this.card as project,
       maxWidth: '95vw',
       width: '45%',
       maxHeight: '660px',

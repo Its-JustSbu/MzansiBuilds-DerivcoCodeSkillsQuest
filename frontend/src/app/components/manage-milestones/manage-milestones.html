@@ -3,18 +3,30 @@
     <mat-icon>close</mat-icon>
   </button>
   <h2>Mange Milestones</h2>
-  @for (stage of stages(); track $index) {
+  @for (stage of stages(); track stage.id) {
     @if (stage) {
       <h3>Milestones for {{ stage.stageTitle }}:</h3>
       <div>
-        @for (milestone of stage.milestones; track milestone) {
+        @for (milestone of stage.milestones; track milestone.id) {
           <div
             class="list-item"
             style="background-color: white; border-radius: 5px; margin-bottom: 15px"
           >
-            <input type="checkbox" id="item" />
-            <label for="item"> {{ milestone.description }} </label>
-            <button matIconButton matSuffix style="color: red">
+            <mat-form-field appearance="outline">
+              <mat-label>Milestone</mat-label>
+              <input
+                matInput
+                placeholder="Milestone Description"
+                [value]="milestone.description"
+                (input)="onMilestoneChange($event, stage.id, milestone.id)"
+              />
+            </mat-form-field>
+            <button
+              matIconButton
+              matSuffix
+              style="color: red"
+              (click)="onDelete(milestone, milestone.id)"
+            >
               <mat-icon>remove</mat-icon>
             </button>
           </div>
@@ -22,23 +34,38 @@
       </div>
     }
 
-    <div class="milestone-form-group">
+    <form
+      #form
+      class="milestone-form-group"
+      (submit)="$event.preventDefault(); addMilestone(form, stage)"
+    >
       <mat-form-field appearance="outline">
         <mat-label>Enter New Milestone</mat-label>
-        <textarea matInput placeholder="Milestone Description"></textarea>
+        <input matInput placeholder="Milestone Description" name="description" />
       </mat-form-field>
       <div class="milestone-actions">
-        <button matIconButton matSuffix style="color: blue">
+        <button matIconButton matSuffix style="color: blue" type="submit">
           <mat-icon>add</mat-icon>
         </button>
       </div>
-    </div>
+    </form>
     <div class="actions-group-1">
-        <button matButton="tonal">Mark {{stage.stageTitle}} as completed</button>
+      @if (stage.stageStatusId !== 3 && disabled()) {
+        <button matButton="outlined">
+          {{stage.stageStatus?.name}}
+        </button>
+        <button matButton="tonal" (click)="onStageComplete(stage)">
+          Mark {{ stage.stageTitle }} as completed
+        </button>
+      } @else {
+        <button matButton="tonal">
+          {{stage.stageStatus?.name}}
+        </button>
+      }
     </div>
   }
   <div class="actions-group">
     <button matButton="outlined">Cancel</button>
-    <button matButton="tonal">Update</button>
+    <button matButton="tonal" (click)="onUpdate()" [disabled]="disabled()">Update</button>
   </div>
 </div>

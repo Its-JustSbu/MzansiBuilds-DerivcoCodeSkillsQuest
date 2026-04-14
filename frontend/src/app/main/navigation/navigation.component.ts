@@ -9,9 +9,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
-import { Storage } from '../../utils/storage';
+import { Storage } from '../../utils/services/storage';
 import { Api } from '../../utils/services/api';
-import { Messagebox } from '../../utils/messagebox';
+import { Messagebox } from '../../utils/services/messagebox';
 import { Auth } from '../../utils/services/auth';
 
 @Component({

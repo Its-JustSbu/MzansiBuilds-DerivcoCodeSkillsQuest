@@ -193,7 +193,7 @@ namespace Backend.tests.ControllerTests
             var okObjectResult = Assert.IsType<OkObjectResult>(result);
             Assert.Equal(200, okObjectResult.StatusCode);
             var returnedProjects = Assert.IsType<List<Project>>(okObjectResult.Value);
-            Assert.Equal(10, returnedProjects.Count);
+            Assert.Equal(1, returnedProjects.Count);
         }
         [Theory]
         [InlineData(1)]
@@ -216,7 +216,7 @@ namespace Backend.tests.ControllerTests
         public async Task UpdateProject_ModifyProjectDetails_ReturnsOkObjectResult(int ProjectId)
         {
             // Arrange
-            var updatedProject = new CreateProjectView() { Name = "Updated Test Project", Description = "This is an updated test project" };
+            var updatedProject = new Project() { Name = "Updated Test Project", Description = "This is an updated test project" };
 
             // Act
             mockDataRepository.Setup(repo => repo.GetOneBy<Project>(p => p.Id == ProjectId)).Returns(new List<Project>() { projects[0] }.AsQueryable());
@@ -241,19 +241,19 @@ namespace Backend.tests.ControllerTests
                 new() { Id = 1, Project = projects[0], StageTitle = "Stage 1", StageNumber = 1, StageStatusId = stageStatuses[0].Id, StageStatus = stageStatuses[0] },
                 new() { Id = 2, Project = projects[0], StageTitle = "Stage 2", StageNumber = 2, StageStatusId = stageStatuses[0].Id, StageStatus = stageStatuses[0] }
             };
-            var updatedProjectStages = new List<StagesView>() {
-                new() { StageTitle = "Stage 2", StageNumber = 2, StageStatus = stageStatuses[0] },
-                new() { StageTitle = "Updated Stage 1", StageNumber = 1, StageStatus = stageStatuses[1] },
+            var updatedProjectStages = new List<ProjectStage>() {
+                new() { Id = 1, StageTitle = "Stage 2", StageNumber = 2, StageStatus = stageStatuses[0] },
+                new() { Id = 2, StageTitle = "Updated Stage 1", StageNumber = 1, StageStatus = stageStatuses[1] },
             };
             // Act
-            mockDataRepository.Setup(repo => repo.GetByAsync<ProjectStage>(s => s.ProjectId == ProjectId)).ReturnsAsync(existingProjectStages);
+            mockDataRepository.Setup(repo => repo.GetBy<ProjectStage>(s => s.ProjectId == ProjectId)).Returns(existingProjectStages.AsQueryable());
             mockDataRepository.Setup(repo => repo.UpdateRange(It.IsAny<List<ProjectStage>>())).Verifiable();
             mockDataRepository.Setup(repo => repo.SaveChangesAsync()).Returns(Task.CompletedTask);
 
             var result = await mockProjectController.UpdateProjectStage(ProjectId, updatedProjectStages);
 
             // Assert
-            mockDataRepository.Verify(repo => repo.GetByAsync<ProjectStage>(s => s.ProjectId == ProjectId), Times.Once);
+            mockDataRepository.Verify(repo => repo.GetBy<ProjectStage>(s => s.ProjectId == ProjectId), Times.Once);
             mockDataRepository.Verify(repo => repo.UpdateRange(It.IsAny<List<ProjectStage>>()), Times.Once);
             mockDataRepository.Verify(repo => repo.SaveChangesAsync(), Times.Once);
             var okObjectResult = Assert.IsType<OkObjectResult>(result);
@@ -265,7 +265,7 @@ namespace Backend.tests.ControllerTests
         {
             // Arrange
             var existingSupportRequest = new List<Support>() { new() { Id = SupportId, Project = projects[0], Description = "This is support 1", SupportTypeId = supportTypes[0].Id, SupportType = supportTypes[0] } };
-            var updatedSupportRequest = new SupportView() { Description = "This is the updated support request", SupportType = supportTypes[1] };
+            var updatedSupportRequest = new Support() { Description = "This is the updated support request", SupportType = supportTypes[1] };
 
             // Act
             mockDataRepository.Setup(repo => repo.GetOneBy<Support>(s => s.Id == SupportId && s.ProjectId == ProjectId)).Returns(existingSupportRequest.AsQueryable());
@@ -277,28 +277,6 @@ namespace Backend.tests.ControllerTests
             // Assert
             mockDataRepository.Verify(repo => repo.GetOneBy<Support>(s => s.Id == SupportId && s.ProjectId == ProjectId), Times.Once);
             mockDataRepository.Verify(repo => repo.Update(It.IsAny<Support>()), Times.Once);
-            mockDataRepository.Verify(repo => repo.SaveChangesAsync(), Times.Once);
-            var okObjectResult = Assert.IsType<OkObjectResult>(result);
-            Assert.Equal(200, okObjectResult.StatusCode);
-        }
-        [Theory]
-        [InlineData(1)]
-        public async Task UpdateMilestone_ModifiesExistingMilestone_ReturnsOkResult(int MilestoneId)
-        {
-            // Arrange
-            var existingMilestone = new List<Milestone>() { new() { Id = MilestoneId, Description = "This is a milestone", ProjectStage = new ProjectStage() { Id = 1 } } };
-            var updatedMilestone = new MilestoneView() { Description = "This is the updated milestone" };
-
-            // Act
-            mockDataRepository.Setup(repo => repo.GetOneBy<Milestone>(m => m.Id == MilestoneId)).Returns(existingMilestone.AsQueryable());
-            mockDataRepository.Setup(repo => repo.Update(It.IsAny<Milestone>())).Verifiable();
-            mockDataRepository.Setup(repo => repo.SaveChangesAsync()).Returns(Task.CompletedTask);
-
-            var result = await mockProjectController.UpdateMilestone(MilestoneId, updatedMilestone);
-
-            // Assert
-            mockDataRepository.Verify(repo => repo.GetOneBy<Milestone>(m => m.Id == MilestoneId), Times.Once);
-            mockDataRepository.Verify(repo => repo.Update(It.IsAny<Milestone>()), Times.Once);
             mockDataRepository.Verify(repo => repo.SaveChangesAsync(), Times.Once);
             var okObjectResult = Assert.IsType<OkObjectResult>(result);
             Assert.Equal(200, okObjectResult.StatusCode);

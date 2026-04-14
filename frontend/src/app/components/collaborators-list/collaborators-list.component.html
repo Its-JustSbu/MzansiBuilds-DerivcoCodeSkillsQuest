@@ -2,25 +2,39 @@
   <table mat-table [dataSource]="collaborators()" class="mat-elevation-z8">
     <!-- Dynamic Column Definition -->
     @for (column of collaboratorsColumn(); track $index) {
-      <ng-container matColumnDef="{{ column }}">
-        <th mat-header-cell *matHeaderCellDef style="background: transparent">
-          {{ column }}
-        </th>
-        <td mat-cell *matCellDef="let element">
-          {{ element[column] }}
-        </td>
-      </ng-container>
+      @if (column === 'joinedAt') {
+        <ng-container matColumnDef="{{ column }}">
+          <th mat-header-cell *matHeaderCellDef style="background: transparent">
+            {{ normalColumn(column) }}
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element[column] | date: 'short' }}
+          </td>
+        </ng-container>
+      } @else {
+        <ng-container matColumnDef="{{ column }}">
+          <th mat-header-cell *matHeaderCellDef style="background: transparent">
+            {{ normalColumn(column) }}
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element[column] }}
+          </td>
+        </ng-container>
+      }
     }
 
     <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef>Actions</th>
       <td mat-cell *matCellDef="let element">
-        <button matIconButton style="color: greenyellow;" (click)="editAction(element)">
+        @if (element.type === 1){
+        <button matIconButton style="color: greenyellow" (click)="acceptAction(element)">
           <mat-icon>thumb_up</mat-icon>
         </button>
-        <button matIconButton style="color: rgb(250, 55, 55);" (click)="deleteAction(element)">
+        <button matIconButton style="color: rgb(250, 55, 55)" (click)="rejectAction(element)">
           <mat-icon>thumb_down</mat-icon>
-        </button>
+        </button>} @else {
+          None
+        }
       </td>
     </ng-container>
 

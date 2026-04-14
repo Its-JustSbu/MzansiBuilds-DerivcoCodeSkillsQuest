@@ -8,7 +8,7 @@ namespace Backend.Models.DTOs
     {
         [Key]
         public int Id { get; set; }
-        [Required, MaxLength(7)]
+        [Required]
         public int StageNumber { get; set; }
         [Required, MaxLength(150)]
         public string? StageTitle { get; set; }
@@ -36,7 +36,7 @@ namespace Backend.Models.DTOs
                 StageStatusId = stage.StageStatus.Id;
             }
         }
-        public void UpdateProjectStage(int stageNumber, string stageTitle, int stageStatusId)
+        public void UpdateProjectStage(int stageNumber, string stageTitle, int stageStatusId, List<Milestone> milestones)
         {
             StageNumber = stageNumber;
             StageTitle = stageTitle;
@@ -45,6 +45,14 @@ namespace Backend.Models.DTOs
             if (StageStatus != null)
             {
                 StageStatus = null;
+            }
+            if (Milestones != null)
+            {
+                Milestones.Clear();
+                foreach (var milestone in milestones)
+                {
+                    Milestones.Add(milestone);
+                }
             }
         }
     }

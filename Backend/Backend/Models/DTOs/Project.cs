@@ -42,10 +42,18 @@ namespace Backend.Models.DTOs
                 })];
             }
         }
-        public void UpdateProject(string name, string description)
+        public void UpdateProject(string name, string description, List<ProjectStage> stage, List<Support> support)
         {
             Name = name;
             Description = description;
+            if (stage.Count > 0)
+            {
+                Stages = stage;
+            }
+            if (support.Count > 0)
+            {
+                Support = support;
+            }
         }
     }
 }

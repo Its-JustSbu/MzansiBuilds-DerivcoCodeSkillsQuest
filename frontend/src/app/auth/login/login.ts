@@ -7,8 +7,8 @@ import { MatInputModule } from '@angular/material/input';
 import { Router, RouterLink } from '@angular/router';
 import { Api } from '../../utils/services/api';
 import { loginView } from '../../utils/interfaces/loginView';
-import { Storage } from '../../utils/storage';
-import { Messagebox } from '../../utils/messagebox';
+import { Storage } from '../../utils/services/storage';
+import { Messagebox } from '../../utils/services/messagebox';
 import { form, FormField, required } from '@angular/forms/signals';
 
 @Component({
