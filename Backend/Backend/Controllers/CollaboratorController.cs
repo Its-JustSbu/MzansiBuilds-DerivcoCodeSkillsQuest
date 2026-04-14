@@ -77,8 +77,26 @@ namespace Backend.Controllers
 
                 var collaborators = dataRepository.GetBy<Collaboration>(x => x.UserId == currentUser.Id)
                     .Include(x => x.Project)
+                    .Include(x => x.User)
                     .Include(x => x.RequestStatus)
                     .Include(x => x.CollaboratorType)
+                    .Select(c => new Collaboration
+                    {
+                        Id = c.Id,
+                        User = new User
+                        {
+                            Id = c.User!.Id,
+                            Name = c.User.Name,
+                            Surname = c.User.Surname,
+                            EmailAddress = c.User.EmailAddress,
+                            Username = c.User.Username
+                        },
+                        Project = c.Project,
+                        RequestStatus = c.RequestStatus,
+                        CollaboratorType = c.CollaboratorType,
+                        JoinedAt = c.JoinedAt,
+                        IsOwner = c.IsOwner
+                    })
                     .ToList();
 
                 return Ok(collaborators);
@@ -97,9 +115,26 @@ namespace Backend.Controllers
             {
                 var collaborators = dataRepository.GetBy<Collaboration>(x => x.ProjectId == ProjectId)
                     .Include(x => x.Project)
-                    
+                    .Include(x => x.User)
                     .Include(x => x.RequestStatus)
                     .Include(x => x.CollaboratorType)
+                    .Select(c => new Collaboration
+                    {
+                        Id = c.Id,
+                        User = new User
+                        {
+                            Id = c.User!.Id,
+                            Name = c.User.Name,
+                            Surname = c.User.Surname,
+                            EmailAddress = c.User.EmailAddress,
+                            Username = c.User.Username
+                        },
+                        Project = c.Project,
+                        RequestStatus = c.RequestStatus,
+                        CollaboratorType = c.CollaboratorType,
+                        JoinedAt = c.JoinedAt,
+                        IsOwner = c.IsOwner
+                    })
                     .ToList();
 
                 return Ok(collaborators);
@@ -118,7 +153,23 @@ namespace Backend.Controllers
             {
                 var comments = dataRepository.GetBy<Comment>(x => x.ProjectId == ProjectId)
                     .Include(x => x.Project)
-                    
+                    .Include(x => x.User)
+                    .Select(c => new Comment
+                    {
+                        Id = c.Id,
+                        User = new User
+                        {
+                            Id = c.User!.Id,
+                            Name = c.User.Name,
+                            Surname = c.User.Surname,
+                            EmailAddress = c.User.EmailAddress,
+                            Username = c.User.Username
+                        },
+                        Project = c.Project,
+                        Title = c.Title,
+                        Description = c.Description,
+                        CreatedAt = c.CreatedAt
+                    })
                     .ToList();
 
                 return Ok(comments);

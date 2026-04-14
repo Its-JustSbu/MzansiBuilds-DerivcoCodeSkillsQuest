@@ -133,6 +133,26 @@ namespace Backend.Controllers
                     .Include(x => x.Comments)
                     .Skip((pageNumber - 1) * maxPageSize)
                     .Take(maxPageSize)
+                    .Select(p => new Project
+                    {
+                        Id = p.Id,
+                        Name = p.Name,
+                        Description = p.Description,
+                        CreatedAt = p.CreatedAt,
+                        Stages = p.Stages,
+                        Support = p.Support,
+                        Collaborations = p.Collaborations!.Select(c => new Collaboration
+                        {
+                            User = new User
+                            {
+                                Id = c.User!.Id,
+                                Name = c.User.Name,
+                                EmailAddress = c.User.EmailAddress,
+                                Username = c.User.Username
+                            }
+                        }).ToList(),
+                        Comments = p.Comments
+                    })
                     .ToList();
 
                 return Ok(projects);
@@ -153,8 +173,29 @@ namespace Backend.Controllers
                     .Include(x => x.Stages)!
                     .ThenInclude(x => x.Milestones)
                     .Include(x => x.Support)
-                    .Include(x => x.Collaborations)
+                    .Include(x => x.Collaborations)!
+                    .ThenInclude(x => x.User)
                     .Include(x => x.Comments)
+                    .Select(p => new Project
+                    {
+                        Id = p.Id,
+                        Name = p.Name,
+                        Description = p.Description,
+                        CreatedAt = p.CreatedAt,
+                        Stages = p.Stages,
+                        Support = p.Support,
+                        Collaborations = p.Collaborations!.Select(c => new Collaboration
+                        {
+                            User = new User
+                            {
+                                Id = c.User!.Id,
+                                Name = c.User.Name,
+                                EmailAddress = c.User.EmailAddress,
+                                Username = c.User.Username
+                            }
+                        }).ToList(),
+                        Comments = p.Comments
+                    })
                     .ToList();
 
                 var completedProjects = projects.Where(p => p.Stages!.All(s => s.StageStatusId == 3))
