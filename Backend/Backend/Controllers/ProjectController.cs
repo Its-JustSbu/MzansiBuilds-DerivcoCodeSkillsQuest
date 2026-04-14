@@ -117,6 +117,53 @@ namespace Backend.Controllers
                 throw;
             }
         }
+        // GET: api/Project/{Id}
+        [HttpGet("{Id}")]
+        public async Task<IActionResult> GetProjectById(int Id)
+        {
+            try
+            {
+                var project = DataRepository.GetBy<Project>(p => p.Id == Id)
+                    .Include(x => x.Stages)!
+                    .ThenInclude(x => x.Milestones)
+                    .Include(x => x.Stages)!
+                    .ThenInclude(x => x.StageStatus)
+                    .Include(x => x.Support)!
+                    .ThenInclude(x => x.SupportType)
+                    .Include(x => x.Collaborations)
+                    .Include(x => x.Comments)
+                    .Select(p => new Project
+                    {
+                        Id = p.Id,
+                        Name = p.Name,
+                        Description = p.Description,
+                        CreatedAt = p.CreatedAt,
+                        Stages = p.Stages,
+                        Support = p.Support,
+                        Collaborations = p.Collaborations!.Select(c => new Collaboration
+                        {
+                            User = new User
+                            {
+                                Id = c.User!.Id,
+                                Name = c.User.Name,
+                                EmailAddress = c.User.EmailAddress,
+                                Username = c.User.Username
+                            }
+                        }).ToList(),
+                        Comments = p.Comments
+                    })
+                    .FirstOrDefault();
+
+                if (project == null) return NotFound("Project not found");
+
+                return Ok(project);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error");
+                throw;
+            }
+        }
         // GET: api/Projects
         // TODO: Add SignalR for real-time updates to projects list
         [HttpGet("{pageNumber}")]

@@ -167,6 +167,20 @@ namespace Backend.tests.ControllerTests
         }
         [Theory]
         [InlineData(1)]
+        public async Task GetProjectById_RetrievesASingleProject_ReturnsOkObjectResult(int Id)
+        {
+            // Act
+            mockDataRepository.Setup(repo => repo.GetBy(It.IsAny<Expression<Func<Project, bool>>>())).Returns(new List<Project>() { projects[0] }.AsQueryable());
+
+            var result = await mockProjectController.GetProjectById(Id);
+
+            // Assert
+            mockDataRepository.Verify(repo => repo.GetBy(It.IsAny<Expression<Func<Project, bool>>>()), Times.Once);
+            var okObjectResult = Assert.IsType<OkObjectResult>(result);
+            Assert.Equal(200, okObjectResult.StatusCode);
+        }
+        [Theory]
+        [InlineData(1)]
         public async Task GetProjects_RetrievesPaginatedProjects_ReturnsOkObjectResult(int pageNumber)
         {
             // Act
