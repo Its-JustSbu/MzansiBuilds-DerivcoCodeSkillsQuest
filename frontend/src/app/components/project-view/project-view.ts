@@ -1,20 +1,32 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { ProjectViewDTO, StageViewDTO, SupportViewDTO } from '../../utils/interfaces/ProjectView';
+import {
+  MilestoneViewDTO,
+  ProjectViewDTO,
+  StageViewDTO,
+  SupportViewDTO,
+} from '../../utils/interfaces/ProjectView';
 import { MatTableModule } from '@angular/material/table';
 import { MatIcon } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { CreateRequest } from '../create-request/create-request';
 import { CollaboratorsListComponent } from '../collaborators-list/collaborators-list.component';
-import { MatDivider } from "@angular/material/divider";
+import { MatDivider } from '@angular/material/divider';
 import { MatListModule } from '@angular/material/list';
-import { MilestoneList } from "../milestone-list/milestone-list";
+import { MilestoneList } from '../milestone-list/milestone-list';
 import { MatInputModule } from '@angular/material/input';
+import { comment, lookup, project, projectStage } from '../../utils/interfaces/entities';
+import { DatePipe } from '@angular/common';
+import { createCommentView } from '../../utils/interfaces/createCommentView';
+import { Messagebox } from '../../utils/messagebox';
+import { Api } from '../../utils/services/api';
+import { form, required, FormField } from '@angular/forms/signals';
+import { FormsModule } from '@angular/forms';
 
 export interface projectDialogData {
   isMine: boolean;
-  project: ProjectViewDTO;
+  project: project;
 }
 
 @Component({
@@ -28,8 +40,11 @@ export interface projectDialogData {
     MatDivider,
     MatListModule,
     MilestoneList,
-    MatInputModule
-],
+    MatInputModule,
+    DatePipe,
+    FormField,
+    FormsModule,
+  ],
   templateUrl: './project-view.html',
   styleUrl: './project-view.scss',
 })
@@ -43,10 +58,35 @@ export class ProjectView implements OnInit {
   supportColumns = signal<string[]>([]);
   stagesDataSource = signal<any[]>([]);
   supportDataSource = signal<any[]>([]);
+  snackService = inject(Messagebox);
+  apiService = inject(Api);
+  comments = signal<comment[]>(this.data.project.comments as comment[]);
 
   constructor() {
-    this.stages.update(() => this.data.project.stages as StageViewDTO[]);
-    this.support.update(() => this.data.project.support as SupportViewDTO[]);
+    this.stages.update(() => {
+      const temp: StageViewDTO[] = [];
+      this.data.project.stages?.forEach((stage) => {
+        temp.push({
+          stageTitle: stage.stageTitle,
+          stageNumber: stage.stageNumber,
+          stageStatus: stage.stageStatus as lookup,
+          milestones: stage.milestones as MilestoneViewDTO[],
+        });
+      });
+
+      return temp;
+    });
+    this.support.update(() => {
+      const temp: SupportViewDTO[] = [];
+      this.data.project.support?.forEach((s) => {
+        temp.push({
+          description: s.description,
+          supportType: s.supportType as lookup,
+        });
+      });
+
+      return temp;
+    });
   }
 
   ngOnInit(): void {
@@ -58,6 +98,7 @@ export class ProjectView implements OnInit {
       this.supportColumns.update(() => Object.keys(this.support()[0]));
       this.supportDataSource.update(() => this.setUpTable(this.support(), this.supportColumns()));
     }
+    this.getComments();
   }
 
   setUpTable(data: any[], columns: string[]): any {
@@ -109,8 +150,50 @@ export class ProjectView implements OnInit {
     });
   }
 
+  newComment = signal<createCommentView>({
+    title: '',
+    description: '',
+  });
+
+  commentForm = form(this.newComment, (path) => {
+    required(path.title, { message: 'title is required.' });
+    required(path.description, { message: 'description is required.' });
+  });
+
+  addComment() {
+    this.apiService
+      .post(`Collaborator/${this.data.project.id}/comment`, this.newComment())
+      .subscribe({
+        next: () => {
+          this.snackService.openSuccess('Comment Posted!');
+          this.comments.update((arr) => [
+            ...arr,
+            {
+              title: this.newComment().title,
+              description: this.newComment().description,
+              createdAt: new Date(),
+            },
+          ]);
+          this.commentForm().reset();
+        },
+        error: (error: any) => {
+          this.snackService.openError(error.error.message);
+        },
+      });
+  }
+
+  getComments() {
+    this.apiService.get(`Collaborator/${this.data.project.id}/comments`).subscribe({
+      next: (res: any) => {
+        this.comments.update(() => res as comment[]);
+      },
+      error: (error: any) => {
+        this.snackService.openError(error.error.message);
+      },
+    });
+  }
+
   onClose() {
     this.dialogRef.close();
   }
-  openRequestModal() {}
 }

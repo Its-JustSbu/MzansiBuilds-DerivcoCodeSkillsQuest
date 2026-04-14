@@ -15,7 +15,16 @@ import { Storage } from '../../utils/storage';
 })
 export class CelebrationWallComponent implements OnInit {
   ngOnInit(): void {
-    this.apiService.get('User/GetCurrentUser').subscribe({
+    this.getCelebrations(this.pageNumber());
+  }
+  snackService = inject(Messagebox);
+  apiService = inject(Api);
+  pageNumber = signal<number>(1);
+  private breakpointObserver = inject(BreakpointObserver);
+  cols = 2;
+
+  getCelebrations(page: number) {
+    this.apiService.get(`Project/Celebrations/${page}`).subscribe({
       next: (res: any) => {
         this.cards.update(() => res as project[]);
       },
@@ -24,11 +33,7 @@ export class CelebrationWallComponent implements OnInit {
       },
     });
   }
-  snackService = inject(Messagebox);
-  storageService = inject(Storage);
-  apiService = inject(Api);
-  private breakpointObserver = inject(BreakpointObserver);
-  cols = 2;
+
   constructor() {
     /** Based on the screen size, switch from standard to one column per row */
     this.breakpointObserver.observe([Breakpoints.Handset]).subscribe((result) => {

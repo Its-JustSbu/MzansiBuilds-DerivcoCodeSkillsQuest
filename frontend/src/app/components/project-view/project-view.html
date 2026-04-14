@@ -49,10 +49,15 @@
         </table>
       </div>
     }
-    <h2>Milestones</h2>
-    <div class="colaborators">
-      <app-milestone-list />
-    </div>
+
+    @if (data.project.stages) {
+      <div class="colaborators">
+        <h2>Milestones</h2>
+        <div>
+          <app-milestone-list [stages]="data.project.stages" />
+        </div>
+      </div>
+    }
     @if (data.isMine) {
       <h2>All Collaborators</h2>
       <div class="colaborators">
@@ -69,21 +74,42 @@
     <h3>Comments</h3>
     <div class="comment-section">
       <mat-list>
-        <mat-divider></mat-divider>
-        <mat-list-item>
-          <div matListItemTitle>This is the comment</div>
-          <div matListItemLine>Posted by User on The date posted.</div>
-        </mat-list-item>
+        @for (comment of comments(); track comment) {
+          @if (comment.user) {
+            <mat-divider></mat-divider>
+            <mat-list-item>
+              <div matListItemTitle>{{ comment.title }}</div>
+              <div matListItemLine>
+                {{ comment.description }} - Posted on {{ comment.createdAt | date: 'short' }} by
+                {{ comment.user.username }}
+              </div>
+            </mat-list-item>
+          }
+        }
       </mat-list>
       @if (!data.isMine) {
-        <div class="add-comment">
+        <form class="add-comment" (ngSubmit)="addComment()">
+          <mat-form-field appearance="outline">
+            <mat-label>Comment Title</mat-label>
+            <input matInput placeholder="Enter title here" [formField]="commentForm.title" />
+            @for (error of commentForm.title().errors(); track error) {
+              <mat-error>{{ error.message }}</mat-error>
+            }
+          </mat-form-field>
           <mat-form-field appearance="outline">
             <mat-label>Add Comment</mat-label>
-            <input matInput placeholder="Enter comment here" />
+            <input
+              matInput
+              placeholder="Enter comment here"
+              [formField]="commentForm.description"
+            />
             <mat-icon matSuffix>comment</mat-icon>
+            @for (error of commentForm.description().errors(); track error) {
+              <mat-error>{{ error.message }}</mat-error>
+            }
           </mat-form-field>
-          <button matButton="tonal">Add Comment</button>
-        </div>
+          <button matButton="tonal" type="submit">Add Comment</button>
+        </form>
       }
     </div>
   </div>

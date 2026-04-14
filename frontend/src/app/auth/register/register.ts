@@ -69,7 +69,7 @@ export class Register {
       return;
     }
 
-    this.apiService.post('user', this.user()).subscribe({
+    this.apiService.post('User', this.user()).subscribe({
       next: () => {
         this.snackService.openSuccess('User registered Successfully!');
         this.router.navigate(['/login']);

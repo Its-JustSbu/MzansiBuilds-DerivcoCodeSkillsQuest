@@ -9,7 +9,9 @@
   <mat-grid-list cols="1" rowHeight="200px">
     @for (card of cards(); track card) {
       <mat-grid-tile>
-        <app-project-card [isGeneralCard]="false" [card]="card" />
+        @if (card.project) {
+          <app-project-card [isGeneralCard]="false" [card]="card.project" />
+        }
       </mat-grid-tile>
     }
   </mat-grid-list>

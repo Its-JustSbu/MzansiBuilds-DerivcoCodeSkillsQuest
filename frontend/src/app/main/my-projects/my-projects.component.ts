@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
 import { map } from 'rxjs/operators';
 import { AsyncPipe } from '@angular/common';
@@ -12,6 +12,9 @@ import { stageStatus, supportType } from '../../utils/StaticDTOs/lookup';
 import { ProjectCard } from '../../components/project-card/project-card';
 import { MatDialog } from '@angular/material/dialog';
 import { AddProjectComponent } from '../../components/add-project/add-project.component';
+import { collaboration, project } from '../../utils/interfaces/entities';
+import { Messagebox } from '../../utils/messagebox';
+import { Api } from '../../utils/services/api';
 
 @Component({
   selector: 'app-my-projects',
@@ -19,15 +22,30 @@ import { AddProjectComponent } from '../../components/add-project/add-project.co
   styleUrl: './my-projects.component.scss',
   imports: [MatGridListModule, ProjectCard, MatIcon, MatAnchor],
 })
-export class MyProjectsComponent {
+export class MyProjectsComponent implements OnInit {
+  snackService = inject(Messagebox);
+  apiService = inject(Api);
   dialog = inject(MatDialog);
   private breakpointObserver = inject(BreakpointObserver);
-  cards = signal<ProjectViewDTO[]>(mockCards);
+  cards = signal<collaboration[]>([]);
   cols = 2;
   constructor() {
     /** Based on the screen size, switch from standard to one column per row */
     this.breakpointObserver.observe([Breakpoints.Handset]).subscribe((result) => {
       this.cols = result.matches ? 1 : 2; // 1 column for mobile, 2 for desktop
+    });
+  }
+  ngOnInit(): void {
+    this.getProjects();
+  }
+  getProjects() {
+    this.apiService.get(`Collaborator`).subscribe({
+      next: (res: any) => {
+        this.cards.update(() => res as collaboration[]);
+      },
+      error: (error: any) => {
+        this.snackService.openError(error.error.message);
+      },
     });
   }
   openAdd(){
@@ -39,73 +57,3 @@ export class MyProjectsComponent {
     })
   }
 }
-const mockCards: ProjectViewDTO[] = [
-  {
-    name: 'Test Project 1',
-    description: 'Test Description 1',
-    stages: [
-      {
-        stageTitle: 'Stage 1',
-        stageNumber: 1,
-        milestones: [
-          {
-            description: 'Milestone 1',
-          },
-        ],
-        stageStatus: stageStatus[0],
-      },
-      {
-        stageTitle: 'Stage 2',
-        stageNumber: 2,
-        milestones: [],
-        stageStatus: stageStatus[0],
-      },
-      {
-        stageTitle: 'Stage 2',
-        stageNumber: 3,
-        milestones: [],
-        stageStatus: stageStatus[0],
-      },
-      {
-        stageTitle: 'Stage 4',
-        stageNumber: 4,
-        milestones: [],
-        stageStatus: stageStatus[0],
-      },
-    ],
-    support: [
-      {
-        description: 'General Support',
-        supportType: supportType[2],
-      },
-    ],
-  },
-  {
-    name: 'Test Project 2',
-    description: 'Test Description 2',
-    stages: [
-      {
-        stageTitle: 'Stage 1',
-        stageNumber: 1,
-        milestones: [
-          {
-            description: 'Milestone 1',
-          },
-        ],
-        stageStatus: stageStatus[0],
-      },
-      {
-        stageTitle: 'Stage 2',
-        stageNumber: 2,
-        milestones: [],
-        stageStatus: stageStatus[0],
-      },
-    ],
-    support: [
-      {
-        description: 'General Support',
-        supportType: supportType[2],
-      },
-    ],
-  },
-];

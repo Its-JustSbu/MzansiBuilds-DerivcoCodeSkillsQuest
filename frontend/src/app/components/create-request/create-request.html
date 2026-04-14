@@ -5,7 +5,7 @@
   </mat-dialog-content>
   <mat-dialog-actions>
     <button type="button" matButton="outlined" (click)="onClose()">No</button>
-    <button type="button" matButton="filled" [mat-dialog-close]="sendRequest()" cdkFocusInitial>
+    <button type="button" matButton="filled" (click)="sendRequest()" cdkFocusInitial>
       Yes
     </button>
   </mat-dialog-actions>

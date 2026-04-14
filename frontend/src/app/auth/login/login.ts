@@ -48,7 +48,7 @@ export class Login {
       return;
     }
 
-    this.apiService.post('user/Login', this.user()).subscribe({
+    this.apiService.post('User/Login', this.user()).subscribe({
       next: (res: any) => {
         this.storageService.setItem('token', res.token);
         this.storageService.setItem('refreshToken', res.refreshToken);

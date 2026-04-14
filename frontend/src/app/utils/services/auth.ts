@@ -17,7 +17,7 @@ export class Auth {
   token = signal<string>('');
 
   constructor() {
-    const tempToken = this.storageService.getItem('bearer-token') as string;
+    const tempToken = this.storageService.getItem('token') as string;
 
     if (tempToken) {
       this.token.update(() => tempToken);
@@ -26,13 +26,13 @@ export class Auth {
     }
   }
 
-  public isTokenExpired(): boolean {
+  public isTokenExpired(): boolean {    
     return this.jwtHelper.isTokenExpired(this.token());
   }
 
   public refreshToken() {
     const rt = this.storageService.getItem('refreshToken');
-
+    console.log(rt);
     if (!rt) {
       this.storageService.removeItem('token');
       this.storageService.removeItem('refreshToken');

@@ -8,7 +8,7 @@ export interface collaboration {
     requestStatus?: lookup;
     collaboratorTypeId?: number;
     collaboratorType?: lookup;
-    joinedAt: Date,
+    joinedAt?: Date,
     isOwner: boolean;
 }
 

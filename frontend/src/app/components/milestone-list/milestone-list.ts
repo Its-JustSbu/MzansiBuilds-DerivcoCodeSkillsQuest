@@ -1,6 +1,6 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, Input, OnInit, signal } from '@angular/core';
 import { MatTableModule } from '@angular/material/table';
-import { milestone } from '../../utils/interfaces/entities';
+import { milestone, projectStage } from '../../utils/interfaces/entities';
 
 @Component({
   selector: 'app-milestone-list',
@@ -8,16 +8,17 @@ import { milestone } from '../../utils/interfaces/entities';
   templateUrl: './milestone-list.html',
   styleUrl: './milestone-list.scss',
 })
-export class MilestoneList {
+export class MilestoneList implements OnInit {
+  @Input({ required: true }) stages!: projectStage[]
+
   ngOnInit(): void {
-    this.milestonesColumn.update(() => Object.keys(this.milestones()[0]));
+    this.milestonesColumn.update(() => Object.keys({ description: '', modifiedAt: new Date() } as milestone));
+    this.stages.forEach((stage) => {
+      if (stage)
+        this.milestones.update(arr => [...arr, ...stage.milestones as milestone[] ])
+    });
   }
 
-  milestones = signal<milestone[]>([
-    {
-      description: 'Milestone',
-      modifiedAt: new Date()
-    },
-  ]);
+  milestones = signal<milestone[]>([]);
   milestonesColumn = signal<string[]>([]);
 }

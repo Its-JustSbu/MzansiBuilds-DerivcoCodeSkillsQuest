@@ -128,11 +128,12 @@ namespace Backend.Controllers
                 var projects = DataRepository.GetAll<Project>()
                     .Include(x => x.Stages)!
                     .ThenInclude(x => x.Milestones)
-                    .Include(x => x.Support)
+                    .Include(x => x.Stages)!
+                    .ThenInclude(x => x.StageStatus)
+                    .Include(x => x.Support)!
+                    .ThenInclude(x => x.SupportType)
                     .Include(x => x.Collaborations)
                     .Include(x => x.Comments)
-                    .Skip((pageNumber - 1) * maxPageSize)
-                    .Take(maxPageSize)
                     .Select(p => new Project
                     {
                         Id = p.Id,
@@ -155,7 +156,12 @@ namespace Backend.Controllers
                     })
                     .ToList();
 
-                return Ok(projects);
+                var pendingProjects = projects.Where(p => p.Stages!.All(s => s.StageStatusId != 3))
+                    .Skip((pageNumber - 1) * maxPageSize)
+                    .Take(maxPageSize)
+                    .ToList();
+
+                return Ok(pendingProjects);
             }
             catch (Exception)
             {
@@ -172,6 +178,10 @@ namespace Backend.Controllers
                 var projects = DataRepository.GetAll<Project>()
                     .Include(x => x.Stages)!
                     .ThenInclude(x => x.Milestones)
+                    .Include(x => x.Stages)!
+                    .ThenInclude(x => x.StageStatus)
+                    .Include(x => x.Support)!
+                    .ThenInclude(x => x.SupportType)
                     .Include(x => x.Support)
                     .Include(x => x.Collaborations)!
                     .ThenInclude(x => x.User)

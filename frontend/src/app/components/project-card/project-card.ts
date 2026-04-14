@@ -10,16 +10,18 @@ import { CreateRequest } from '../create-request/create-request';
 import { UpdateProjectComponent } from '../update-project/update-project.component';
 import { deleteModalData, DeletePopUp } from '../delete-pop-up/delete-pop-up';
 import { ManageMilestones } from '../manage-milestones/manage-milestones';
+import { project } from '../../utils/interfaces/entities';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-project-card',
-  imports: [MatIconModule, MatButtonModule, MatCardModule, MatMenuModule],
+  imports: [MatIconModule, MatButtonModule, MatCardModule, MatMenuModule, DatePipe],
   templateUrl: './project-card.html',
   styleUrl: './project-card.scss',
 })
 export class ProjectCard {
   @Input({ required: true }) isGeneralCard!: boolean;
-  @Input({ required: true }) card!: ProjectViewDTO;
+  @Input({ required: true }) card!: project;
   dialog = inject(MatDialog);
 
   openDetails() {

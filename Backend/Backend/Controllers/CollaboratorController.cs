@@ -22,9 +22,18 @@ namespace Backend.Controllers
             {
                 var user = currentUserService.GetUserDetails();
                 var currentUser = dataRepository.GetOneBy<User>(x => x.Id == user.Id || x.EmailAddress == user.EmailAddress).FirstOrDefault();
-                var project = dataRepository.GetOneBy<Project>(p => p.Id == ProjectId).FirstOrDefault();
+                var project = dataRepository.GetOneBy<Project>(p => p.Id == ProjectId).Include(x => x.Collaborations).FirstOrDefault();
 
                 if (project == null || currentUser == null) return NotFound("Project or User does not exist");
+
+                if (project.Collaborations != null && project.Collaborations.Any(c => c.UserId == currentUser.Id))
+                    return BadRequest(new { message = "User is already a collaborator of this project"});
+
+                if (project.Collaborations!.Count > 0)
+                {
+                    createCollaboratorView.IsOwner = true;
+                    createCollaboratorView.CollaboratorType = new() { Id = 1, Name = "Owner" };
+                }
 
                 var collaboration = new Collaboration(createCollaboratorView, project, currentUser);
 
@@ -77,6 +86,7 @@ namespace Backend.Controllers
 
                 var collaborators = dataRepository.GetBy<Collaboration>(x => x.UserId == currentUser.Id)
                     .Include(x => x.Project)
+                    .ThenInclude(x => x.Collaborations)
                     .Include(x => x.User)
                     .Include(x => x.RequestStatus)
                     .Include(x => x.CollaboratorType)

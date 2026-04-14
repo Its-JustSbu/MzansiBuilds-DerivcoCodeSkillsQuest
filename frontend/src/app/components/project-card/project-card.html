@@ -20,4 +20,26 @@
   <mat-card-content class="dashboard-card-content" (click)="openDetails()">
     <div>{{ card.description }}</div>
   </mat-card-content>
+  <mat-card-footer>
+    <div class="card-footer">
+      @if (card.collaborations && card.collaborations.length > 0) {
+        <div class="status-indicator">
+          <div class="pulse-wrap">
+            <div class="pulse-ring"></div>
+            <div class="dot-core"></div>
+          </div>
+          <span class="status-label">Active</span>
+        </div>
+      } @else {
+        <div class="status-indicator">
+          <div class="pulse-wrap">
+            <div class="pulse-ring-error"></div>
+            <div class="dot-core-error"></div>
+          </div>
+          <span class="status-label">Inactive</span>
+        </div>
+      }
+      <span class="status-meta">Created: {{ card.createdAt | date: 'short' }}</span>
+    </div>
+  </mat-card-footer>
 </mat-card>
