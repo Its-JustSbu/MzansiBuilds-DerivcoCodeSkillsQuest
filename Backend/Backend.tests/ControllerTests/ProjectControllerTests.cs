@@ -25,17 +25,17 @@ namespace Backend.tests.ControllerTests
         }
         // Global Arrange
         public static List<Project> projects = [
-            new() { Id = 1, Name = "Test", Description = "Test Project" },
-            new() { Id = 2, Name = "Test", Description = "Test Project" },
-            new() { Id = 3, Name = "Test", Description = "Test Project" },
-            new() { Id = 4, Name = "Test", Description = "Test Project" },
-            new() { Id = 5, Name = "Test", Description = "Test Project" },
-            new() { Id = 6, Name = "Test", Description = "Test Project" },
-            new() { Id = 7, Name = "Test", Description = "Test Project" },
-            new() { Id = 8, Name = "Test", Description = "Test Project" },
-            new() { Id = 9, Name = "Test", Description = "Test Project" },
-            new() { Id = 10, Name = "Test", Description = "Test Project" },
-            new() { Id = 11, Name = "Test", Description = "Test Project" },
+            new() { Id = 1, Name = "Test", Description = "Test Project", Stages = [new() { Id = 1, StageStatusId = 3 }, new() { Id = 12, StageStatusId = 2 }] },
+            new() { Id = 2, Name = "Test", Description = "Test Project", Stages = [new() { Id = 2, StageStatusId = 3 }] },
+            new() { Id = 3, Name = "Test", Description = "Test Project", Stages = [new() { Id = 3, StageStatusId = 3 }] },
+            new() { Id = 4, Name = "Test", Description = "Test Project", Stages = [new() { Id = 4, StageStatusId = 3 }] },
+            new() { Id = 5, Name = "Test", Description = "Test Project", Stages = [new() { Id = 5, StageStatusId = 3 }] },
+            new() { Id = 6, Name = "Test", Description = "Test Project", Stages = [new() { Id = 6, StageStatusId = 3 }] },
+            new() { Id = 7, Name = "Test", Description = "Test Project", Stages = [new() { Id = 7, StageStatusId = 3 }] },
+            new() { Id = 8, Name = "Test", Description = "Test Project", Stages = [new() { Id = 8, StageStatusId = 3 }] },
+            new() { Id = 9, Name = "Test", Description = "Test Project", Stages = [new() { Id = 9, StageStatusId = 3 }] },
+            new() { Id = 10, Name = "Test", Description = "Test Project", Stages = [new() { Id = 10, StageStatusId = 3 }] },
+            new() { Id = 11, Name = "Test", Description = "Test Project", Stages = [new() { Id = 11, StageStatusId = 1 }] },
         ];
         public static List<SupportType> supportTypes = [
             new() { Id = 1, Name = "Financial" },
@@ -169,10 +169,6 @@ namespace Backend.tests.ControllerTests
         [InlineData(1)]
         public async Task GetProjects_RetrievesPaginatedProjects_ReturnsOkObjectResult(int pageNumber)
         {
-            // Arrange
-            int pageSize = 10;
-            var paginatedProjects = projects.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
-
             // Act
             mockDataRepository.Setup(repo => repo.GetAll<Project>()).Returns(projects.AsQueryable());
 
@@ -183,7 +179,23 @@ namespace Backend.tests.ControllerTests
             var okObjectResult = Assert.IsType<OkObjectResult>(result);
             Assert.Equal(200, okObjectResult.StatusCode);
             var returnedProjects = Assert.IsType<List<Project>>(okObjectResult.Value);
-            Assert.Equal(paginatedProjects.Count, returnedProjects.Count);
+            Assert.Equal(10, returnedProjects.Count);
+        }
+        [Theory]
+        [InlineData(1)]
+        public async Task GetCompletedProjects_RetrievesPaginatedCompletedProjects_ReturnsOkObjectResult(int pageNumber)
+        {
+            // Act
+            mockDataRepository.Setup(repo => repo.GetAll<Project>()).Returns(projects.AsQueryable());
+
+            var result = await mockProjectController.GetCompletedProjects(pageNumber);
+
+            // Assert
+            mockDataRepository.Verify(repo => repo.GetAll<Project>(), Times.Once);
+            var okObjectResult = Assert.IsType<OkObjectResult>(result);
+            Assert.Equal(200, okObjectResult.StatusCode);
+            var returnedProjects = Assert.IsType<List<Project>>(okObjectResult.Value);
+            Assert.Equal(9, returnedProjects.Count);
         }
         [Theory]
         [InlineData(1)]

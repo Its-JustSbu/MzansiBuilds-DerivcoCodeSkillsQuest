@@ -143,6 +143,35 @@ namespace Backend.Controllers
                 throw;
             }
         }
+        [HttpGet("Celebrations/{pageNumber}")]
+        public async Task<IActionResult> GetCompletedProjects(int pageNumber)
+        {
+            var maxPageSize = 10;
+            try
+            {
+                var projects = DataRepository.GetAll<Project>()
+                    .Include(x => x.Stages)!
+                    .ThenInclude(x => x.Milestones)
+                    .Include(x => x.Support)
+                    .Include(x => x.Collaborations)
+                    .Include(x => x.Comments)
+                    .ToList();
+
+                var completedProjects = projects.Where(p => p.Stages!.All(s => s.StageStatusId == 3))
+                    .Skip((pageNumber - 1) * maxPageSize)
+                    .Take(maxPageSize)
+                    .ToList();
+
+                if (completedProjects.Count == 0) return NotFound(new { message = "No Projects Completed Yet!"});
+
+                return Ok(completedProjects);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error");
+                throw;
+            }
+        }
         // PUT: api/Project/{id}
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateProject(int id, CreateProjectView updatedProject)
