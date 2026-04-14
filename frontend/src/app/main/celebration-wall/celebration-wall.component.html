@@ -1,10 +1,14 @@
 <div class="grid-container">
-  <h1 class="mat-h1">Welcome to the Celebration Wall</h1>
-  <mat-grid-list cols="{{cols}}" rowHeight="300px">
-    @for (card of cards() ; track card) {
-      <mat-grid-tile>
-        <app-celebration-card [card]="card"/>
-      </mat-grid-tile>
-    }
-  </mat-grid-list>
+  @if (cards().length > 0) {
+    <h1 class="mat-h1">Welcome to the Celebration Wall</h1>
+    <mat-grid-list cols="{{ cols }}" rowHeight="300px">
+      @for (card of cards(); track card) {
+        <mat-grid-tile>
+          <app-celebration-card [card]="card" />
+        </mat-grid-tile>
+      }
+    </mat-grid-list>
+  } @else {
+    <h1 class="mat-h1">Developers are at work! We'll be celebrating projects soon.</h1>
+  }
 </div>

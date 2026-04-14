@@ -1,9 +1,9 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { Storage } from './storage';
+import { Storage } from '../storage';
 import { Router } from '@angular/router';
 import { Api } from './api';
-import { Messagebox } from './messagebox';
+import { Messagebox } from '../messagebox';
 
 @Injectable({
   providedIn: 'root',

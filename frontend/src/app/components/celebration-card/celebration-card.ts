@@ -6,6 +6,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { ProjectViewDTO, StageViewDTO } from '../../utils/interfaces/ProjectView';
 import { MatDivider } from '@angular/material/divider';
 import { MatListModule } from '@angular/material/list';
+import { project, projectStage } from '../../utils/interfaces/entities';
 
 @Component({
   selector: 'app-celebration-card',
@@ -21,13 +22,14 @@ import { MatListModule } from '@angular/material/list';
   styleUrl: './celebration-card.scss',
 })
 export class CelebrationCard {
-  @Input({ required: true }) card!: ProjectViewDTO;
-  getNumberOfMilestones(stages?: StageViewDTO[]): number {
+  @Input({ required: true }) card!: project;
+  getNumberOfMilestones(stages?: projectStage[]): number {
     let num = 0;
     if (!stages) return 0;
 
     stages.forEach((stage) => {
-      num += stage.milestones.length;
+      if (stage.milestones)
+        num += stage.milestones.length;
     });
 
     return num;

@@ -17,24 +17,32 @@
         <span class="stat-label">Number of Support Required</span>
       </div>
     </div>
-    <div class="footer">
-      <mat-divider></mat-divider>
-      <div class="collaborators-row">
-        <div class="avatar-stack">
-          <span class="avatar">JD</span>
-          <span class="avatar">KL</span>
-          <span class="avatar">MR</span>
-          <span class="avatar avatar-more">+4</span>
+    @if (card.collaborations) {
+      <div class="footer">
+        <mat-divider></mat-divider>
+        <div class="collaborators-row">
+          <div class="avatar-stack">
+            @for (users of card.collaborations; track $index) {
+              @if (users.user) {
+                <span class="avatar">{{ users.user.name[0] }}{{ users.user.surname[1] }}</span>
+              }
+            }
+            @if (card.collaborations.length - 3 > 0) {
+              <span class="avatar avatar-more">+{{ card.collaborations.length - 3 }}</span>
+            }
+          </div>
+          <button matButton [matMenuTriggerFor]="menu" aria-label="Toggle menu">
+            View collaborators
+          </button>
+          <mat-menu #menu="matMenu" xPosition="before">
+            @for (users of card.collaborations; track $index) {
+              @if (users.user) {
+                <mat-list-item>{{users.user.name}} {{users.user.surname}}</mat-list-item>
+              }
+            }
+          </mat-menu>
         </div>
-        <button matButton [matMenuTriggerFor]="menu" aria-label="Toggle menu">
-          View collaborators
-        </button>
-        <mat-menu #menu="matMenu" xPosition="before">
-            <mat-list-item>Item 1</mat-list-item>
-            <mat-list-item>Item 2</mat-list-item>
-            <mat-list-item>Item 3</mat-list-item>
-        </mat-menu>
       </div>
-    </div>
+    }
   </mat-card-content>
 </mat-card>
