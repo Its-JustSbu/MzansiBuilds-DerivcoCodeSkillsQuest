@@ -95,10 +95,11 @@ namespace Backend.Controllers
             try
             {
                 var user = currentUserService.GetUserDetails();
+                var currentUser = dataRepository.GetBy<User>(x => x.Id == user.Id || x.EmailAddress == user.EmailAddress).FirstOrDefault();
 
-                if (user == null) return NotFound("User not found");
+                if (currentUser == null) return NotFound("User not found");
 
-                return Ok(user);
+                return Ok(currentUser);
             }
             catch (Exception)
             {

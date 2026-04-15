@@ -8,7 +8,7 @@ namespace Backend.Models.DTOs
     {
         [Key]
         public int Id { get; set; }
-        [Required, MaxLength(255)]
+        [MaxLength(255)]
         public string? Description { get; set; }
         [ForeignKey(nameof(SupportTypeId))]
         public int SupportTypeId { get; set; }
@@ -19,7 +19,7 @@ namespace Backend.Models.DTOs
         [DataType(DataType.DateTime)]
         public DateTime RequestedAt { get; set; } = DateTime.Now;
         public Support() { }
-        public Support(int projectId, SupportView support)
+        public Support(int projectId, Support support)
         {
             ProjectId = projectId;
             Description = support.Description;

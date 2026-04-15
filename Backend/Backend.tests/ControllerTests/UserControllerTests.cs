@@ -113,11 +113,13 @@ namespace Backend.tests.ControllerTests
 
             // Act
             mockCurrentUserService.Setup(u => u.GetUserDetails()).Returns(users.FirstOrDefault()!);
+            mockDataRepository.Setup(u => u.GetBy(It.IsAny<Expression<Func<User, bool>>>())).Returns(users.AsQueryable());
 
             var result = await mockUserController.GetCurrentUser();
 
             // Assert
             mockCurrentUserService.Verify(service => service.GetUserDetails(), Times.Once);
+            mockDataRepository.Verify(repo => repo.GetBy(It.IsAny<Expression<Func<User, bool>>>()), Times.Once);
             var GetActionResult = Assert.IsType<OkObjectResult>(result);
             Assert.Equal(200, GetActionResult.StatusCode);
         }

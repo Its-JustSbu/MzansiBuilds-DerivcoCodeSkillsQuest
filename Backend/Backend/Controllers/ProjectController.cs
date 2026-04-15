@@ -74,7 +74,7 @@ namespace Backend.Controllers
         }
         // POST: api/Project/{ProjectId}/support
         [HttpPost("{ProjectId}/support")]
-        public async Task<IActionResult> CreateSupportRequest(int ProjectId, SupportView support)
+        public async Task<IActionResult> CreateSupportRequest(int ProjectId, Support support)
         {
             try
             {
@@ -174,9 +174,9 @@ namespace Backend.Controllers
             {
                 var projects = DataRepository.GetAll<Project>()
                     .Include(x => x.Stages)!
-                    .ThenInclude(x => x.Milestones)
-                    .Include(x => x.Stages)!
                     .ThenInclude(x => x.StageStatus)
+                    .Include(x => x.Stages)!
+                    .ThenInclude(x => x.Milestones)
                     .Include(x => x.Support)!
                     .ThenInclude(x => x.SupportType)
                     .Include(x => x.Collaborations)

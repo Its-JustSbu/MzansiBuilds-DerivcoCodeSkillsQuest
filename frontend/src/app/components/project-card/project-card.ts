@@ -51,7 +51,7 @@ export class ProjectCard {
         message: `Are you sure you would like to delete ${this.card.name}?`,
         subMessage:
           'Once this is done, it can not be undone, all collabs and comments will be removed.',
-        apiUri: '{REMEMBER API URI}',
+        apiUri: `Project/${this.card.id}`,
       } as deleteModalData,
       maxWidth: '50vw',
       width: '100%',

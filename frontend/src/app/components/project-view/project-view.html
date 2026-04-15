@@ -61,7 +61,7 @@
     @if (data.isMine && data.collabs) {
       <h2>All Collaborators</h2>
       <div class="colaborators">
-        <app-collaborators-list [data]="data.collabs"/>
+        <app-collaborators-list [data]="data.collabs" />
       </div>
     }
     @if (!data.isMine) {
@@ -70,21 +70,21 @@
       </div>
     }
   </div>
-  <div style="margin-top: 40px;">
+  <div style="margin-top: 40px">
     <h3>Comments</h3>
     <div class="comment-section">
       <mat-list>
-        @for (comment of comments(); track comment) {
-          @if (comment.user) {
-            <mat-divider></mat-divider>
-            <mat-list-item>
-              <div matListItemTitle>{{ comment.title }}</div>
-              <div matListItemLine>
-                {{ comment.description }} - Posted on {{ comment.createdAt | date: 'short' }} by
-                {{ comment.user.username }}
-              </div>
-            </mat-list-item>
-          }
+        @for (comment of comments(); track comment.id) {
+          <mat-divider></mat-divider>
+          <mat-list-item>
+            <div matListItemTitle>{{ comment.title }}</div>
+            <div matListItemLine>
+              {{ comment.description }} - Posted on {{ comment.createdAt | date: 'short' }}
+              @if (comment.user) {
+                by {{ comment.user.username }}
+              }
+            </div>
+          </mat-list-item>
         }
       </mat-list>
       @if (!data.isMine) {

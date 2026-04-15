@@ -34,6 +34,7 @@ export class HomeComponent implements OnInit {
     this.apiService.get(`Project/${page}`).subscribe({
       next: (res: any) => {
         this.cards.update(() => res as project[]);
+    console.log(this.cards());
       },
       error: (error: any) => {
         this.snackService.openError(error.error.message);

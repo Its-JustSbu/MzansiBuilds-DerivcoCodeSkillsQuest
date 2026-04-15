@@ -8,9 +8,8 @@ namespace Backend.Models.DTOs
     {
         [Key]
         public int Id { get; set; }
-        [Required]
         public int StageNumber { get; set; }
-        [Required, MaxLength(150)]
+        [MaxLength(150)]
         public string? StageTitle { get; set; }
         [DataType(DataType.Date)]
         public DateTime ModifiedAt { get; set; } = DateTime.Now;

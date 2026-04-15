@@ -85,7 +85,7 @@ namespace Backend.Controllers
 
                 if (currentUser == null) return Forbid("Access Forbidden!");
 
-                var collaborators = dataRepository.GetBy<Collaboration>(x => x.UserId == currentUser.Id)
+                var collaborators = dataRepository.GetBy<Collaboration>(x => x.UserId == currentUser.Id && x.RequestStatusId == 2)
                     .Include(x => x.Project)
                     .Include(x => x.User)
                     .Include(x => x.RequestStatus)

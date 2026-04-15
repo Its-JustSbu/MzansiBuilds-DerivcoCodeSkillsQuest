@@ -13,17 +13,15 @@ namespace Backend.Models.DTOs
     {
         [Key]
         public int Id { get; set; }
-        [Required, MaxLength(255)]
+        [MaxLength(255)]
         public string? Name { get; set; }
-        [Required, MaxLength(255)]
+        [MaxLength(255)]
         public string? Surname { get; set; }
-        [Required, MaxLength(255), EmailAddress]
+        [MaxLength(255), EmailAddress]
         public string? EmailAddress { get; set; }
-        [Required, MaxLength(255)]
+        [MaxLength(255)]
         public string? Username { get; set; }
-        [Required]
         public string? Password { get; set; }
-        [Required]
         public byte[]? Salt { get; set; }
         [DataType(DataType.DateTime)]
         public DateTime CreatedAt { get; set; } = DateTime.Now;

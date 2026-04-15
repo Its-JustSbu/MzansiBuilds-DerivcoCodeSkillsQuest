@@ -6,7 +6,7 @@ namespace Backend.Models.DTOs
     {
         [Key]
         public int Id { get; set; }
-        [Required, MaxLength(255)]
+        [MaxLength(255)]
         public string? Name { get; set; }
     }
 }

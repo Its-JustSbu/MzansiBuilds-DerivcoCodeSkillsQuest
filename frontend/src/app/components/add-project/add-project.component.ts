@@ -147,24 +147,26 @@ export class AddProjectComponent {
     }));
   }
 
+  onClose() {
+    this.dialogRef.close();
+  }
+
   onSubmit() {
     if (this.projectForm().invalid()) {
       this.snackService.openWarning('Please complete the form!');
       return;
     }
 
+    console.log(this.project());
+
     this.apiService.post(`Project/`, this.project()).subscribe({
       next: (res) => {
-        this.snackService.openSuccess(`${res.name} added!`);
+        this.snackService.openSuccess(`Project added!`);
         this.onClose();
       },
       error: (error: any) => {
         this.snackService.openError(error.error.message);
       },
     });
-  }
-
-  onClose() {
-    this.dialogRef.close();
   }
 }

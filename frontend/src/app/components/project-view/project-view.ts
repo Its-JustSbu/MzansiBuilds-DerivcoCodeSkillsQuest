@@ -67,7 +67,7 @@ export class ProjectView implements OnInit {
   supportDataSource = signal<any[]>([]);
   snackService = inject(Messagebox);
   apiService = inject(Api);
-  comments = signal<comment[]>(this.data.project.comments as comment[]);
+  comments = signal<comment[]>([]);
 
   constructor() {
     this.stages.update(() => {
@@ -106,6 +106,7 @@ export class ProjectView implements OnInit {
       this.supportDataSource.update(() => this.setUpTable(this.support(), this.supportColumns()));
     }
     this.getComments();
+
   }
 
   setUpTable(data: any[], columns: string[]): any {
@@ -171,15 +172,11 @@ export class ProjectView implements OnInit {
     this.apiService
       .post(`Collaborator/${this.data.project.id}/comment`, this.newComment())
       .subscribe({
-        next: () => {
+        next: (res: comment) => {
           this.snackService.openSuccess('Comment Posted!');
           this.comments.update((arr) => [
             ...arr,
-            {
-              title: this.newComment().title,
-              description: this.newComment().description,
-              createdAt: new Date(),
-            },
+            res
           ]);
           this.commentForm().reset();
         },

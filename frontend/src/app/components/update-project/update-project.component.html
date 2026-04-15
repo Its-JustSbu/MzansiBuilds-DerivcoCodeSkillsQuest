@@ -112,7 +112,7 @@
         </div>
       }
 
-      <form #form class="support-form-group" (submit)="$event.preventDefault(); addSupport(form)">
+      <form #supportform class="support-form-group" (submit)="$event.preventDefault(); addSupport(supportform)">
         <mat-form-field appearance="outline">
           <mat-label>Select Support Type</mat-label>
           <mat-select [(value)]="selectedSupport">

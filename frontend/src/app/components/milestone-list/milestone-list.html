@@ -1,22 +1,33 @@
-@if (milestones().length > 0) {
+<!-- @if (milestones().length > 0) { -->
   <div class="mat-elevation-z2">
     <table mat-table [dataSource]="milestones()" class="mat-elevation-z8">
       <!-- Dynamic Column Definition -->
       @for (column of milestonesColumn(); track $index) {
+        @if (column === 'modifiedAt') {
         <ng-container matColumnDef="{{ column }}">
           <th mat-header-cell *matHeaderCellDef style="background: transparent">
-            {{ column }}
+            {{ normalColumn(column) }}
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element[column] | date: 'short' }}
+          </td>
+        </ng-container>
+      } @else {
+        <ng-container matColumnDef="{{ column }}">
+          <th mat-header-cell *matHeaderCellDef style="background: transparent">
+            {{ normalColumn(column) }}
           </th>
           <td mat-cell *matCellDef="let element">
             {{ element[column] }}
           </td>
         </ng-container>
       }
+      }
 
       <tr mat-header-row *matHeaderRowDef="milestonesColumn()"></tr>
       <tr mat-row *matRowDef="let row; columns: milestonesColumn()"></tr>
     </table>
   </div>
-} @else {
+<!-- } @else {
   <h3>No Milestones Achieved Yet!</h3>
-}
+} -->

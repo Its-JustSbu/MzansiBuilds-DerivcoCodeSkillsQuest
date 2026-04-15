@@ -93,9 +93,9 @@ export class ManageMilestones implements OnInit {
       next: (res) => {
         this.snackService.openSuccess('Milestone added!');
         this.stages.update((arr) =>
-          arr.map((stage) => ({
-            ...stage,
-            milestones: [...(stage.milestones as milestone[]), res as milestone],
+          arr.map((s) => ({
+            ...s,
+            milestones: s.id === stage.id ? [...s.milestones as milestone[], res as milestone] : s.milestones as milestone[]
           })),
         );
       },

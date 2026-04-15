@@ -123,7 +123,7 @@ namespace Backend.tests.ControllerTests
                 new() { Project = projects[0], Id = 1, Description = "This is support 1", SupportTypeId = supportTypes[0].Id, SupportType = supportTypes[0] },
                 new() { Project = projects[0], Id = 2, Description = "This is support 2", SupportTypeId = supportTypes[1].Id, SupportType = supportTypes[1] },
             };
-            var newSupportRequest = new SupportView() { Description = "This is support 4", SupportType = supportTypes[1] };
+            var newSupportRequest = new Support() { Description = "This is support 4", SupportType = supportTypes[1] };
 
             // Act
             mockDataRepository.Setup(repo => repo.GetOneBy<Project>(p => p.Id == ProjectId)).Returns(new List<Project>() { projects[0] }.AsQueryable());

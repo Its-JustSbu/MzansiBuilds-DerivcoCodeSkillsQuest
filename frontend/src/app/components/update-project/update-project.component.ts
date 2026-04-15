@@ -123,10 +123,12 @@ export class UpdateProjectComponent implements OnInit {
 
   addSupport(event: any) {
     const data = new FormData(event);
-    console.log(this.selectedSupport);
+    console.log(data.get('description'));
     const currenSupport: support = {
+      id: 0,
       description: data.get('description') as string,
-      supportType: this.selectedSupport as lookup,
+      supportTypeId: this.selectedSupport.id,
+      supportType: undefined,
       requestedAt: new Date(),
     };
 
@@ -151,7 +153,8 @@ export class UpdateProjectComponent implements OnInit {
     const stageView: projectStage = {
       stageTitle: data.get('title') as string,
       stageNumber: (this.project().stages as projectStage[]).length + 1,
-      stageStatus: this.selectedStatus,
+      stageStatusId: this.selectedStatus.id,
+      stageStatus: undefined,
       milestones: [],
       modifiedAt: new Date(),
     };
@@ -214,8 +217,9 @@ export class UpdateProjectComponent implements OnInit {
 
     if (this.addedSupport().length > 0) {
       this.addedSupport().forEach((support) => {
+        console.log(support);
         this.apiService
-          .post(`Project/${this.project().id}/${support.id}/support`, support)
+          .post(`Project/${this.project().id}/support`, support)
           .subscribe({
             next: () => {},
             error: (error: any) => {
@@ -226,7 +230,9 @@ export class UpdateProjectComponent implements OnInit {
       });
     }
 
-    this.apiService.put(`Project/`, this.project()).subscribe({
+    console.log(this.project())
+
+    this.apiService.put(`Project/${this.project().id}`, this.project()).subscribe({
       next: (res) => {
         this.snackService.openSuccess(res.message);
         this.onClose();

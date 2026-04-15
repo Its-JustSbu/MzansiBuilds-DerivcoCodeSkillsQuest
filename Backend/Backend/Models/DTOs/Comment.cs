@@ -14,9 +14,9 @@ namespace Backend.Models.DTOs
         [ForeignKey(nameof(UserId))]
         public int UserId { get; set; }
         public User? User { get; set; }
-        [Required, MaxLength(255)]
+        [MaxLength(255)]
         public string? Title { get; set; }
-        [Required, MaxLength(255)]
+        [MaxLength(255)]
         public string? Description { get; set; }
         [DataType(DataType.DateTime)]
         public DateTime CreatedAt { get; set; } = DateTime.Now;

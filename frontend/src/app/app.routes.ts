@@ -7,6 +7,7 @@ import { HomeComponent } from './main/home/home.component';
 import { MyProjectsComponent } from './main/my-projects/my-projects.component';
 import { CelebrationWallComponent } from './main/celebration-wall/celebration-wall.component';
 import { ProfileComponent } from './main/profile/profile.component';
+import { authGuard } from './utils/services/auth-guard';
 
 export const routes: Routes = [
   { path: 'login', component: Login },
@@ -22,6 +23,7 @@ export const routes: Routes = [
       { path: 'profile', component: ProfileComponent },
       { path: 'portal', redirectTo: '/portal/home', pathMatch: 'full' },
     ],
+    canActivate: [authGuard]
   },
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: '**', redirectTo: 'not-found', pathMatch: 'full' },

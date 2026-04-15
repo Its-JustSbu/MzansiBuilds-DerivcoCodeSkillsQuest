@@ -8,9 +8,9 @@ namespace Backend.Models.DTOs
     {
         [Key]
         public int Id { get; set; }
-        [Required, MaxLength(255)]
+        [MaxLength(255)]
         public string? Name { get; set; }
-        [Required, MaxLength(500)]
+        [MaxLength(500)]
         public string? Description { get; set; }
         [DataType(DataType.DateTime)]
         public DateTime CreatedAt { get; set; } = DateTime.Now;
@@ -48,10 +48,18 @@ namespace Backend.Models.DTOs
             Description = description;
             if (stage.Count > 0)
             {
+                for (int i = 0; i < stage.Count; i++)
+                {
+                    stage[i].StageStatus = null;
+                }
                 Stages = stage;
             }
             if (support.Count > 0)
             {
+                for (int i = 0; i < support.Count; i++)
+                {
+                    support[i].SupportType = null;
+                }
                 Support = support;
             }
         }

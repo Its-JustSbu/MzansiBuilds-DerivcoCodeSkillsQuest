@@ -8,7 +8,7 @@ namespace Backend.Models.DTOs
     {
         [Key]
         public int Id { get; set; }
-        [Required, MaxLength(255)]
+        [MaxLength(255)]
         public string? Description { get; set; }
         [ForeignKey(nameof(ProjectStageId))]
         public int ProjectStageId { get; set; }
